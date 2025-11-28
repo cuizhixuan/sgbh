@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Txt</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Arial", "Microsoft YaHei", sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            padding-bottom: 30px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding-bottom: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #fff;
+            padding: 15px 0;
+            font-size: 20px;
+            background-color: #409eff;
+            margin: 0 0 15px 0;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .input-panel {
+            background-color: #fff;
+            border-radius: 6px;
+            margin: 0 15px 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        .panel-header {
+            padding: 12px 15px;
+            background-color: #f0f2f5;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: #333;
+            border-bottom: 1px solid #eee;
+        }
+        .panel-content {
+            padding: 15px;
+            display: block;
+            max-height: 120vh;
+            overflow-y: auto;
+        }
+
+        .character-selector {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .character-btn {
+            flex: 1;
+            margin: 0 5px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            background-color: #fafafa;
+            cursor: pointer;
+            text-align: center;
+            font-size: 15px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .character-btn.active {
+            background-color: #409eff;
+            color: white;
+            border-color: #409eff;
+        }
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .input-item {
+            flex: 1;
+            min-width: 140px;
+        }
+        label {
+            display: block;
+            margin-bottom: 4px;
+            color: #666;
+            font-size: 13px;
+        }
+        select, input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        input {
+            -moz-appearance: textfield;
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .global-owned-materials {
+            background-color: #f6ffed;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #52c41a;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        button {
+            flex: 1;
+            padding: 10px;
+            background-color: #409eff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #3086e8;
+        }
+        button#calculate-all {
+            background-color: #1890ff;
+        }
+
+        .results-section {
+            padding: 0 15px;
+        }
+        .total-result {
+            background-color: #fffbe6;
+            border-left: 4px solid #faad14;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        .need-more { color: #f5222d; font-weight: bold; }
+        .enough { color: #52c41a; font-weight: bold; }
+        .package-count { color: #722ed1; font-weight: bold; }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 20px;
+            padding: 0 15px;
+        }
+        .material-table {
+            min-width: 500px;
+            border-collapse: collapse;
+            text-align: center;
+            font-size: 13px;
+            width: 100%;
+        }
+        .material-table th, .material-table td {
+            padding: 8px;
+            border: 1px solid #eee;
+        }
+        .material-table th {
+            background-color: #fafafa;
+            color: #666;
+            font-weight: 500;
+        }
+        .material-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .green { color: #52c41a; font-weight: 500; }
+        .blue { color: #1890ff; font-weight: 500; }
+        .purple { color: #722ed1; font-weight: 500; }
+		.red { color: red; font-weight: 500; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>阶位材料升级计算器（优化增强版）</h1>
+
+        <div class="input-panel">
+            <div class="panel-header" id="input-panel-header">
+                <span>输入与设置</span>
+                <span id="panel-icon">▼</span>
+            </div>
+            <div class="panel-content" id="input-panel-content">
+                <div class="character-selector">
+                    <div class="character-btn active" data-char="1">清风枪</div>
+                    <div class="character-btn" data-char="2">铜鎏鎏金虎符</div>
+                    <div class="character-btn" data-char="3">灵宝弓</div>
+                    <div class="character-btn" data-char="4">火珠龙鸾</div>
+                </div>
+                
+                <div class="input-group">
+                    <div class="input-item">
+                        <label for="current-level">当前等级</label>
+                        <select id="current-level">
+                            <option value="1">1（绿1）</option><option value="2">2（绿2）</option><option value="3">3（绿3）</option>
+                            <option value="4">4（绿4）</option><option value="5">5（绿5）</option><option value="6">6（蓝1）</option>
+                            <option value="7">7（蓝2）</option><option value="8">8（蓝3）</option><option value="9">9（蓝4）</option>
+                            <option value="10">10（蓝5）</option><option value="11">11（紫1）</option><option value="12">12（紫2）</option>
+                            <option value="13">13（紫3）</option><option value="14">14（紫4）</option><option value="15">15（紫5）</option>
+                            <option value="16">16（紫6）</option><option value="17">17（紫7）</option><option value="18">18（紫8）</option>
+                            <option value="19">19（紫9）</option><option value="20">20（紫10）</option><option value="21">21（红1）</option>
+							<option value="22">22（红2）</option><option value="23">23（红3）</option><option value="24">24（红4）</option>
+							<option value="25">25（红5）</option><option value="26">26（红6）</option><option value="27">27（红7）</option>
+							<option value="28">28（红8）</option><option value="29">29（红9）</option><option value="30">30（红10）</option>
+							<option value="31">31（红11）</option><option value="32">32（红12）</option><option value="33">33（红13）</option>
+							<option value="34">34（红14）</option><option value="35">35（红15）</option><option value="36">36（红16）</option>
+							<option value="37">37（红17）</option><option value="38">38（红18）</option><option value="39">39（红19）</option>
+							<option value="40">40（红20）</option><option value="41">41（红21）</option><option value="42">42（红22）</option>
+							<option value="43">43（红23）</option><option value="44">44（红24）</option><option value="45">45（红25）</option>
+							<option value="46">46（红26）</option><option value="47">47（红27）</option><option value="48">48（红28）</option>
+							<option value="49">49（红29）</option><option value="50">50（红30）</option>
+                        </select>
+                    </div>
+                    <div class="input-item">
+                        <label for="target-level">目标等级</label>
+                        <select id="target-level">
+                            <option value="1">1（绿1）</option><option value="2">2（绿2）</option><option value="3">3（绿3）</option>
+                            <option value="4">4（绿4）</option><option value="5">5（绿5）</option><option value="6">6（蓝1）</option>
+                            <option value="7">7（蓝2）</option><option value="8">8（蓝3）</option><option value="9">9（蓝4）</option>
+                            <option value="10">10（蓝5）</option><option value="11">11（紫1）</option><option value="12">12（紫2）</option>
+                            <option value="13">13（紫3）</option><option value="14">14（紫4）</option><option value="15">15（紫5）</option>
+                            <option value="16">16（紫6）</option><option value="17">17（紫7）</option><option value="18">18（紫8）</option>
+                            <option value="19">19（紫9）</option><option value="20">20（紫10）</option><option value="21">21（红1）</option>
+							<option value="22">22（红2）</option><option value="23">23（红3）</option><option value="24">24（红4）</option>
+							<option value="25">25（红5）</option><option value="26">26（红6）</option><option value="27">27（红7）</option>
+							<option value="28">28（红8）</option><option value="29">29（红9）</option><option value="30">30（红10）</option>
+							<option value="31">31（红11）</option><option value="32">32（红12）</option><option value="33">33（红13）</option>
+							<option value="34">34（红14）</option><option value="35">35（红15）</option><option value="36">36（红16）</option>
+							<option value="37">37（红17）</option><option value="38">38（红18）</option><option value="39">39（红19）</option>
+							<option value="40">40（红20）</option><option value="41">41（红21）</option><option value="42">42（红22）</option>
+							<option value="43">43（红23）</option><option value="44">44（红24）</option><option value="45">45（红25）</option>
+							<option value="46">46（红26）</option><option value="47">47（红27）</option><option value="48">48（红28）</option>
+							<option value="49">49（红29）</option><option value="50">50（红30）</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="global-owned-materials">
+                    <h3 style="margin-bottom: 8px; font-size: 15px;">全局拥有材料（所有角色共用）</h3>
+                    <div class="input-group">
+                        <div class="input-item">
+                            <label for="global-owned-zitan">已拥有紫檀木</label>
+                            <input type="number" id="global-owned-zitan" min="0" placeholder="非负整数" value="0">
+                        </div>
+                        <div class="input-item">
+                            <label for="global-owned-jingjin">已拥有精金</label>
+                            <input type="number" id="global-owned-jingjin" min="0" placeholder="非负整数" value="0">
+                        </div>
+                        <div class="input-item">
+                            <label for="global-owned-qingjin">已拥有青金石</label>
+                            <input type="number" id="global-owned-qingjin" min="0" placeholder="非负整数" value="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-item">
+                        <label for="zitan-package">紫檀木礼包（单包数量）</label>
+                        <input type="number" id="zitan-package" min="1" placeholder="单包数量" value="1200">
+                    </div>
+                    <div class="input-item">
+                        <label for="zitan-pkg-price">紫檀木礼包（单包价格）</label>
+                        <input type="number" id="zitan-pkg-price" min="1" placeholder="活动币" value="90">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-item">
+                        <label for="jingjin-package">精金礼包（单包数量）</label>
+                        <input type="number" id="jingjin-package" min="1" placeholder="单包数量" value="60">
+                    </div>
+                    <div class="input-item">
+                        <label for="jingjin-pkg-price">精金礼包（单包价格）</label>
+                        <input type="number" id="jingjin-pkg-price" min="1" placeholder="活动币" value="90">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-item">
+                        <label for="qingjin-package">青金石礼包（单包数量）</label>
+                        <input type="number" id="qingjin-package" min="1" placeholder="单包数量" value="20">
+                    </div>
+                    <div class="input-item">
+                        <label for="qingjin-pkg-price">青金石礼包（单包价格）</label>
+                        <input type="number" id="qingjin-pkg-price" min="1" placeholder="活动币" value="90">
+                    </div>
+                </div>
+
+                <div class="global-owned-materials">
+                    <label for="total-activity-coin"><strong>活动币数量</strong></label>
+                    <input type="number" id="total-activity-coin" min="0" placeholder="输入所有可用活动币总数" value="0">
+                </div>
+                
+                <div class="btn-group">
+                    <button id="save-char">保存</button>
+                    <button id="calculate-all">汇总计算</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-section">
+            <div class="total-result" id="total-result">
+                <p><strong>汇总结果：</strong>请先保存4个神兵数据，再点击"汇总计算"</p>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <h2 style="font-size: 16px; color: #333; margin: 15px 0 10px;">各阶位单阶材料需求参考</h2>
+            <table class="material-table">
+                <thead>
+                    <tr>
+                        <th>数字阶位</th>
+                        <th>阶位</th>
+                        <th>紫檀木（数量）</th>
+                        <th>精金（数量）</th>
+                        <th>青金石（数量）</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td class="green">绿1</td><td>1000</td><td>50</td><td>0</td></tr>
+                    <tr><td>2</td><td class="green">绿2</td><td>1500</td><td>75</td><td>0</td></tr>
+                    <tr><td>3</td><td class="green">绿3</td><td>2000</td><td>100</td><td>0</td></tr>
+                    <tr><td>4</td><td class="green">绿4</td><td>2500</td><td>125</td><td>0</td></tr>
+                    <tr><td>5</td><td class="green">绿5</td><td>3000</td><td>150</td><td>0</td></tr>
+                    <tr><td>6</td><td class="blue">蓝1</td><td>3500</td><td>175</td><td>0</td></tr>
+                    <tr><td>7</td><td class="blue">蓝2</td><td>4000</td><td>200</td><td>0</td></tr>
+                    <tr><td>8</td><td class="blue">蓝3</td><td>4500</td><td>225</td><td>0</td></tr>
+                    <tr><td>9</td><td class="blue">蓝4</td><td>5000</td><td>250</td><td>0</td></tr>
+                    <tr><td>10</td><td class="blue">蓝5</td><td>5500</td><td>275</td><td>0</td></tr>
+                    <tr><td>11</td><td class="purple">紫1</td><td>6000</td><td>300</td><td>150</td></tr>
+                    <tr><td>12</td><td class="purple">紫2</td><td>6500</td><td>325</td><td>160</td></tr>
+                    <tr><td>13</td><td class="purple">紫3</td><td>7000</td><td>350</td><td>170</td></tr>
+                    <tr><td>14</td><td class="purple">紫4</td><td>7500</td><td>375</td><td>180</td></tr>
+                    <tr><td>15</td><td class="purple">紫5</td><td>8000</td><td>400</td><td>190</td></tr>
+                    <tr><td>16</td><td class="purple">紫6</td><td>8500</td><td>425</td><td>200</td></tr>
+                    <tr><td>17</td><td class="purple">紫7</td><td>9000</td><td>450</td><td>210</td></tr>
+                    <tr><td>18</td><td class="purple">紫8</td><td>9500</td><td>475</td><td>220</td></tr>
+                    <tr><td>19</td><td class="purple">紫9</td><td>10000</td><td>500</td><td>230</td></tr>
+                    <tr><td>20</td><td class="purple">紫10</td><td>10500</td><td>525</td><td>240</td></tr>
+					<tr><td>21</td><td class="red">红1</td><td>11000</td><td>550</td><td>250</td></tr>
+					<tr><td>22</td><td class="red">红2</td><td>11500</td><td>575</td><td>260</td></tr>
+					<tr><td>23</td><td class="red">红3</td><td>12000</td><td>600</td><td>270</td></tr>
+					<tr><td>24</td><td class="red">红4</td><td>12500</td><td>625</td><td>280</td></tr>
+					<tr><td>25</td><td class="red">红5</td><td>13000</td><td>650</td><td>290</td></tr>
+					<tr><td>26</td><td class="red">红6</td><td>13500</td><td>675</td><td>300</td></tr>
+					<tr><td>27</td><td class="red">红7</td><td>14000</td><td>700</td><td>310</td></tr>
+					<tr><td>28</td><td class="red">红8</td><td>14500</td><td>725</td><td>320</td></tr>
+					<tr><td>29</td><td class="red">红9</td><td>15000</td><td>750</td><td>330</td></tr>
+					<tr><td>30</td><td class="red">红10</td><td>15500</td><td>775</td><td>340</td></tr>
+					<tr><td>31</td><td class="red">红11</td><td>16000</td><td>800</td><td>350</td></tr>
+					<tr><td>32</td><td class="red">红12</td><td>16500</td><td>825</td><td>360</td></tr>
+					<tr><td>33</td><td class="red">红13</td><td>17000</td><td>850</td><td>370</td></tr>
+					<tr><td>34</td><td class="red">红14</td><td>17500</td><td>875</td><td>380</td></tr>
+					<tr><td>35</td><td class="red">红15</td><td>18000</td><td>900</td><td>390</td></tr>
+					<tr><td>36</td><td class="red">红16</td><td>18500</td><td>925</td><td>400</td></tr>
+					<tr><td>37</td><td class="red">红17</td><td>19000</td><td>950</td><td>410</td></tr>
+					<tr><td>38</td><td class="red">红18</td><td>19500</td><td>975</td><td>420</td></tr>
+					<tr><td>39</td><td class="red">红19</td><td>20000</td><td>1000</td><td>430</td></tr>
+					<tr><td>40</td><td class="red">红20</td><td>20500</td><td>1025</td><td>440</td></tr>
+					<tr><td>41</td><td class="red">红21</td><td>21000</td><td>1050</td><td>450</td></tr>
+					<tr><td>42</td><td class="red">红22</td><td>21500</td><td>1075</td><td>460</td></tr>
+					<tr><td>43</td><td class="red">红23</td><td>22000</td><td>1100</td><td>470</td></tr>
+					<tr><td>44</td><td class="red">红24</td><td>22500</td><td>1125</td><td>480</td></tr>
+					<tr><td>45</td><td class="red">红25</td><td>23000</td><td>1150</td><td>490</td></tr>
+					<tr><td>46</td><td class="red">红26</td><td>23500</td><td>1175</td><td>500</td></tr>
+					<tr><td>47</td><td class="red">红27</td><td>24000</td><td>1200</td><td>510</td></tr>
+					<tr><td>48</td><td class="red">红28</td><td>24500</td><td>1225</td><td>520</td></tr>
+					<tr><td>49</td><td class="red">红29</td><td>25000</td><td>1250</td><td>530</td></tr>
+					<tr><td>50</td><td class="red">红30</td><td>25500</td><td>1275</td><td>540</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('input-panel-header').addEventListener('click', function() {
+            const content = document.getElementById('input-panel-content');
+            const icon = document.getElementById('panel-icon');
+            content.style.display = content.style.display === 'none' ? 'block' : 'none';
+            icon.textContent = content.style.display === 'none' ? '▲' : '▼';
+        });
+
+        const levelMaterialData = {
+            1: [1000, 50, 0], 2: [1500, 75, 0], 3: [2000, 100, 0], 4: [2500, 125, 0], 5: [3000, 150, 0],
+            6: [3500, 175, 0], 7: [4000, 200, 0], 8: [4500, 225, 0], 9: [5000, 250, 0], 10: [5500, 275, 0],
+            11: [6000, 300, 150], 12: [6500, 325, 160], 13: [7000, 350, 170], 14: [7500, 375, 180], 15: [8000, 400, 190],
+            16: [8500, 425, 200], 17: [9000, 450, 210], 18: [9500, 475, 220], 19: [10000, 500, 230], 20: [10500, 525, 240],
+			21: [11000, 550, 250] ,22: [11500, 575, 260] ,23: [12000, 600, 270] ,24: [12500, 625, 280] ,25: [13000, 650, 290] ,
+			26: [13500, 675, 300] ,27: [14000, 700, 310] ,28: [14500, 725, 320] ,29: [15000, 750, 330] ,30: [15500, 775, 340] ,
+			31: [16000, 800, 350] ,32: [16500, 825, 360] ,33: [17000, 850, 370] ,34: [17500, 875, 380] ,35: [18000, 900, 390] ,
+			36: [18500, 925, 400] ,37: [19000, 950, 410] ,38: [19500, 975, 420] ,39: [20000, 1000, 430] ,40: [20500, 1025, 440] ,
+			41: [21000, 1050, 450] ,42: [21500, 1075, 460] ,43: [22000, 1100, 470] ,44: [22500, 1125, 480] ,45: [23000, 1150, 490] ,
+			46: [23500, 1175, 500] ,47: [24000, 1200, 510] ,48: [24500, 1225, 520] ,49: [25000, 1250, 530] ,50: [25500, 1275, 540]
+        };
+        const levelNameMap = {
+            1: "绿1", 2: "绿2", 3: "绿3", 4: "绿4", 5: "绿5",
+            6: "蓝1", 7: "蓝2", 8: "蓝3", 9: "蓝4", 10: "蓝5",
+            11: "紫1", 12: "紫2", 13: "紫3", 14: "紫4", 15: "紫5",
+            16: "紫6", 17: "紫7", 18: "紫8", 19: "紫9", 20: "紫10",
+			21: "红1", 22: "红2", "23": "红3", "24": "红4", "25": "红5",
+			26: "红6", 27:  "红7",  28: "红8",  29: "红9",  30: "红10",
+			31: "红11", 32: "红12", 33: "红13", 34: "红14", 35: "红15",
+			36: "红16", 37: "红17", 38: "红18", 39: "红19", 40: "红20",
+			41: "红21", 42: "红22", 43: "红23", 44: "红24", 45: "红25",
+			46: "红26", 47: "红27", 48: "红28", 49: "红29", 50: "红30"
+        };
+
+        let charData = {
+            1: { saved: false }, 2: { saved: false }, 3: { saved: false }, 4: { saved: false }
+        };
+        let currentChar = "1";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.character-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.character-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentChar = btn.dataset.char;
+                    loadCharData(currentChar);
+                });
+            });
+
+            document.getElementById('save-char').addEventListener('click', () => {
+                saveCurrentCharData();
+            });
+
+            document.getElementById('calculate-all').addEventListener('click', () => {
+                calculateTotal();
+            });
+        });
+
+        function saveCurrentCharData() {
+            const data = {
+                currentLevel: parseInt(document.getElementById('current-level').value),
+                targetLevel: parseInt(document.getElementById('target-level').value),
+                saved: true
+            };
+            charData[currentChar] = data;
+            document.querySelector(`.character-btn[data-char="${currentChar}"]`).style.backgroundColor = "#52c41a";
+            document.querySelector(`.character-btn[data-char="${currentChar}"]`).style.color = "#fff";
+            alert(`神兵${currentChar}数据已保存！`);
+        }
+
+        function loadCharData(charId) {
+            const data = charData[charId];
+            if (data.saved) {
+                document.getElementById('current-level').value = data.currentLevel;
+                document.getElementById('target-level').value = data.targetLevel;
+            }
+        }
+
+        function calculateTotal() {
+            const allSaved = Object.values(charData).every(c => c.saved);
+            if (!allSaved) {
+                document.getElementById('total-result').innerHTML = '<p style="color:#f5222d;"><strong>汇总结果：</strong>请先保存4个神兵的数据！</p>';
+                return;
+            }
+
+            // 计算所有神兵的总材料需求（累计所有等级）
+            let totalZitan = 0, totalJingjin = 0, totalQingjin = 0;
+            
+            for (let charId = 1; charId <= 4; charId++) {
+                const data = charData[charId];
+                if (data.targetLevel < data.currentLevel) {
+                    document.getElementById('total-result').innerHTML = `<p style="color:#f5222d;">错误：神兵${charId}的目标等级必须大于当前等级</p>`;
+                    return;
+                }
+
+                // 累计计算该神兵所有等级的材料需求
+                for (let l = data.currentLevel + 1; l <= data.targetLevel; l++) {
+                    totalZitan += levelMaterialData[l][0];
+                    totalJingjin += levelMaterialData[l][1];
+                    totalQingjin += levelMaterialData[l][2];
+                }
+            }
+
+            // 读取全局拥有的材料
+            const ownedZitan = parseInt(document.getElementById('global-owned-zitan').value) || 0;
+            const ownedJingjin = parseInt(document.getElementById('global-owned-jingjin').value) || 0;
+            const ownedQingjin = parseInt(document.getElementById('global-owned-qingjin').value) || 0;
+
+            // 计算材料缺口
+            const gapZitan = Math.max(0, totalZitan - ownedZitan);
+            const gapJingjin = Math.max(0, totalJingjin - ownedJingjin);
+            const gapQingjin = Math.max(0, totalQingjin - ownedQingjin);
+
+            // 读取礼包设置
+            const zitanPkgPrice = parseInt(document.getElementById('zitan-pkg-price').value) || 350;
+            const jingjinPkgPrice = parseInt(document.getElementById('jingjin-pkg-price').value) || 350;
+            const qingjinPkgPrice = parseInt(document.getElementById('qingjin-pkg-price').value) || 350;
+            const zitanPackage = parseInt(document.getElementById('zitan-package').value) || 1200;
+            const jingjinPackage = parseInt(document.getElementById('jingjin-package').value) || 60;
+            const qingjinPackage = parseInt(document.getElementById('qingjin-package').value) || 20;
+
+            // 计算需要购买的礼包数量
+            const needZitanPkg = gapZitan === 0 ? 0 : Math.ceil(gapZitan / zitanPackage);
+            const needJingjinPkg = gapJingjin === 0 ? 0 : Math.ceil(gapJingjin / jingjinPackage);
+            const needQingjinPkg = gapQingjin === 0 ? 0 : Math.ceil(gapQingjin / qingjinPackage);
+
+            // 计算总活动币消耗
+            const totalCoinNeed = (needZitanPkg * zitanPkgPrice) + 
+                                 (needJingjinPkg * jingjinPkgPrice) + 
+                                 (needQingjinPkg * qingjinPkgPrice);
+
+            const totalActivityCoin = parseInt(document.getElementById('total-activity-coin').value) || 0;
+            const isEnough = totalCoinNeed <= totalActivityCoin;
+            const coinGap = isEnough ? 0 : totalCoinNeed - totalActivityCoin;
+
+            const totalHtml = `
+                <p><strong>4神兵汇总结果：</strong></p>
+                <p><strong>1. 总材料需求：</strong>
+                  紫檀木<span class="need-more">${totalZitan}</span> | 
+                  精金<span class="need-more">${totalJingjin}</span> | 
+                  青金石<span class="need-more">${totalQingjin}</span>
+                </p>
+                <p><strong>2. 总材料缺口：</strong>
+                  紫檀木<span class="need-more">${gapZitan}</span> | 
+                  精金<span class="need-more">${gapJingjin}</span> | 
+                  青金石<span class="need-more">${gapQingjin}</span>
+                </p>
+                <p><strong>3. 总所需礼包：</strong>
+                  紫檀木<span class="package-count">${needZitanPkg}</span>份 | 
+                  精金<span class="package-count">${needJingjinPkg}</span>份 | 
+                  青金石<span class="package-count">${needQingjinPkg}</span>份
+                </p>
+                <p><strong>4. 活动币判断：</strong>
+                  总拥有${totalActivityCoin}币 | 总消耗${totalCoinNeed}币 | 
+                  状态<span class="${isEnough?'enough':'need-more'}">${isEnough?'足够':'差'+coinGap+'币'}</span>
+                </p>
+            `;
+            document.getElementById('total-result').innerHTML = totalHtml;
+        }
+    </script>
+</body>
+</html>
