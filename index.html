@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Txt</title>
+    <title>阶位材料升级计算器（优化增强版）</title>
     <style>
         * {
             margin: 0;
@@ -60,20 +60,22 @@
 
         .character-selector {
             display: flex;
-            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
             margin-bottom: 15px;
             border-bottom: 1px solid #eee;
             padding-bottom: 10px;
         }
         .character-btn {
             flex: 1;
-            margin: 0 5px;
+            min-width: 120px;
+            margin: 0;
             padding: 8px;
             border: 1px solid #ddd;
             background-color: #fafafa;
             cursor: pointer;
             text-align: center;
-            font-size: 15px;
+            font-size: 14px;
             border-radius: 4px;
             transition: all 0.2s;
         }
@@ -81,6 +83,11 @@
             background-color: #409eff;
             color: white;
             border-color: #409eff;
+        }
+        .character-btn.saved {
+            background-color: #52c41a;
+            color: white;
+            border-color: #52c41a;
         }
         .input-group {
             display: flex;
@@ -185,7 +192,7 @@
         .green { color: #52c41a; font-weight: 500; }
         .blue { color: #1890ff; font-weight: 500; }
         .purple { color: #722ed1; font-weight: 500; }
-		.red { color: red; font-weight: 500; }
+        .red { color: red; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -199,10 +206,12 @@
             </div>
             <div class="panel-content" id="input-panel-content">
                 <div class="character-selector">
-                    <div class="character-btn active" data-char="1">清风枪</div>
-                    <div class="character-btn" data-char="2">铜鎏鎏金虎符</div>
-                    <div class="character-btn" data-char="3">灵宝弓</div>
-                    <div class="character-btn" data-char="4">火珠龙鸾</div>
+                    <div class="character-btn active" data-char="1">步1</div>
+                    <div class="character-btn" data-char="2">步2</div>
+                    <div class="character-btn" data-char="3">弓1</div>
+                    <div class="character-btn" data-char="4">弓2</div>
+                    <div class="character-btn" data-char="5">骑1</div>
+                    <div class="character-btn" data-char="6">骑2</div>
                 </div>
                 
                 <div class="input-group">
@@ -216,16 +225,16 @@
                             <option value="13">13（紫3）</option><option value="14">14（紫4）</option><option value="15">15（紫5）</option>
                             <option value="16">16（紫6）</option><option value="17">17（紫7）</option><option value="18">18（紫8）</option>
                             <option value="19">19（紫9）</option><option value="20">20（紫10）</option><option value="21">21（红1）</option>
-							<option value="22">22（红2）</option><option value="23">23（红3）</option><option value="24">24（红4）</option>
-							<option value="25">25（红5）</option><option value="26">26（红6）</option><option value="27">27（红7）</option>
-							<option value="28">28（红8）</option><option value="29">29（红9）</option><option value="30">30（红10）</option>
-							<option value="31">31（红11）</option><option value="32">32（红12）</option><option value="33">33（红13）</option>
-							<option value="34">34（红14）</option><option value="35">35（红15）</option><option value="36">36（红16）</option>
-							<option value="37">37（红17）</option><option value="38">38（红18）</option><option value="39">39（红19）</option>
-							<option value="40">40（红20）</option><option value="41">41（红21）</option><option value="42">42（红22）</option>
-							<option value="43">43（红23）</option><option value="44">44（红24）</option><option value="45">45（红25）</option>
-							<option value="46">46（红26）</option><option value="47">47（红27）</option><option value="48">48（红28）</option>
-							<option value="49">49（红29）</option><option value="50">50（红30）</option>
+                            <option value="22">22（红2）</option><option value="23">23（红3）</option><option value="24">24（红4）</option>
+                            <option value="25">25（红5）</option><option value="26">26（红6）</option><option value="27">27（红7）</option>
+                            <option value="28">28（红8）</option><option value="29">29（红9）</option><option value="30">30（红10）</option>
+                            <option value="31">31（红11）</option><option value="32">32（红12）</option><option value="33">33（红13）</option>
+                            <option value="34">34（红14）</option><option value="35">35（红15）</option><option value="36">36（红16）</option>
+                            <option value="37">37（红17）</option><option value="38">38（红18）</option><option value="39">39（红19）</option>
+                            <option value="40">40（红20）</option><option value="41">41（红21）</option><option value="42">42（红22）</option>
+                            <option value="43">43（红23）</option><option value="44">44（红24）</option><option value="45">45（红25）</option>
+                            <option value="46">46（红26）</option><option value="47">47（红27）</option><option value="48">48（红28）</option>
+                            <option value="49">49（红29）</option><option value="50">50（红30）</option>
                         </select>
                     </div>
                     <div class="input-item">
@@ -238,16 +247,16 @@
                             <option value="13">13（紫3）</option><option value="14">14（紫4）</option><option value="15">15（紫5）</option>
                             <option value="16">16（紫6）</option><option value="17">17（紫7）</option><option value="18">18（紫8）</option>
                             <option value="19">19（紫9）</option><option value="20">20（紫10）</option><option value="21">21（红1）</option>
-							<option value="22">22（红2）</option><option value="23">23（红3）</option><option value="24">24（红4）</option>
-							<option value="25">25（红5）</option><option value="26">26（红6）</option><option value="27">27（红7）</option>
-							<option value="28">28（红8）</option><option value="29">29（红9）</option><option value="30">30（红10）</option>
-							<option value="31">31（红11）</option><option value="32">32（红12）</option><option value="33">33（红13）</option>
-							<option value="34">34（红14）</option><option value="35">35（红15）</option><option value="36">36（红16）</option>
-							<option value="37">37（红17）</option><option value="38">38（红18）</option><option value="39">39（红19）</option>
-							<option value="40">40（红20）</option><option value="41">41（红21）</option><option value="42">42（红22）</option>
-							<option value="43">43（红23）</option><option value="44">44（红24）</option><option value="45">45（红25）</option>
-							<option value="46">46（红26）</option><option value="47">47（红27）</option><option value="48">48（红28）</option>
-							<option value="49">49（红29）</option><option value="50">50（红30）</option>
+                            <option value="22">22（红2）</option><option value="23">23（红3）</option><option value="24">24（红4）</option>
+                            <option value="25">25（红5）</option><option value="26">26（红6）</option><option value="27">27（红7）</option>
+                            <option value="28">28（红8）</option><option value="29">29（红9）</option><option value="30">30（红10）</option>
+                            <option value="31">31（红11）</option><option value="32">32（红12）</option><option value="33">33（红13）</option>
+                            <option value="34">34（红14）</option><option value="35">35（红15）</option><option value="36">36（红16）</option>
+                            <option value="37">37（红17）</option><option value="38">38（红18）</option><option value="39">39（红19）</option>
+                            <option value="40">40（红20）</option><option value="41">41（红21）</option><option value="42">42（红22）</option>
+                            <option value="43">43（红23）</option><option value="44">44（红24）</option><option value="45">45（红25）</option>
+                            <option value="46">46（红26）</option><option value="47">47（红27）</option><option value="48">48（红28）</option>
+                            <option value="49">49（红29）</option><option value="50">50（红30）</option>
                         </select>
                     </div>
                 </div>
@@ -317,7 +326,7 @@
 
         <div class="results-section">
             <div class="total-result" id="total-result">
-                <p><strong>汇总结果：</strong>请先保存4个神兵数据，再点击"汇总计算"</p>
+                <p><strong>汇总结果：</strong>请先保存6个神兵数据，再点击"汇总计算"</p>
             </div>
         </div>
 
@@ -354,36 +363,36 @@
                     <tr><td>18</td><td class="purple">紫8</td><td>9500</td><td>475</td><td>220</td></tr>
                     <tr><td>19</td><td class="purple">紫9</td><td>10000</td><td>500</td><td>230</td></tr>
                     <tr><td>20</td><td class="purple">紫10</td><td>10500</td><td>525</td><td>240</td></tr>
-					<tr><td>21</td><td class="red">红1</td><td>11000</td><td>550</td><td>250</td></tr>
-					<tr><td>22</td><td class="red">红2</td><td>11500</td><td>575</td><td>260</td></tr>
-					<tr><td>23</td><td class="red">红3</td><td>12000</td><td>600</td><td>270</td></tr>
-					<tr><td>24</td><td class="red">红4</td><td>12500</td><td>625</td><td>280</td></tr>
-					<tr><td>25</td><td class="red">红5</td><td>13000</td><td>650</td><td>290</td></tr>
-					<tr><td>26</td><td class="red">红6</td><td>13500</td><td>675</td><td>300</td></tr>
-					<tr><td>27</td><td class="red">红7</td><td>14000</td><td>700</td><td>310</td></tr>
-					<tr><td>28</td><td class="red">红8</td><td>14500</td><td>725</td><td>320</td></tr>
-					<tr><td>29</td><td class="red">红9</td><td>15000</td><td>750</td><td>330</td></tr>
-					<tr><td>30</td><td class="red">红10</td><td>15500</td><td>775</td><td>340</td></tr>
-					<tr><td>31</td><td class="red">红11</td><td>16000</td><td>800</td><td>350</td></tr>
-					<tr><td>32</td><td class="red">红12</td><td>16500</td><td>825</td><td>360</td></tr>
-					<tr><td>33</td><td class="red">红13</td><td>17000</td><td>850</td><td>370</td></tr>
-					<tr><td>34</td><td class="red">红14</td><td>17500</td><td>875</td><td>380</td></tr>
-					<tr><td>35</td><td class="red">红15</td><td>18000</td><td>900</td><td>390</td></tr>
-					<tr><td>36</td><td class="red">红16</td><td>18500</td><td>925</td><td>400</td></tr>
-					<tr><td>37</td><td class="red">红17</td><td>19000</td><td>950</td><td>410</td></tr>
-					<tr><td>38</td><td class="red">红18</td><td>19500</td><td>975</td><td>420</td></tr>
-					<tr><td>39</td><td class="red">红19</td><td>20000</td><td>1000</td><td>430</td></tr>
-					<tr><td>40</td><td class="red">红20</td><td>20500</td><td>1025</td><td>440</td></tr>
-					<tr><td>41</td><td class="red">红21</td><td>21000</td><td>1050</td><td>450</td></tr>
-					<tr><td>42</td><td class="red">红22</td><td>21500</td><td>1075</td><td>460</td></tr>
-					<tr><td>43</td><td class="red">红23</td><td>22000</td><td>1100</td><td>470</td></tr>
-					<tr><td>44</td><td class="red">红24</td><td>22500</td><td>1125</td><td>480</td></tr>
-					<tr><td>45</td><td class="red">红25</td><td>23000</td><td>1150</td><td>490</td></tr>
-					<tr><td>46</td><td class="red">红26</td><td>23500</td><td>1175</td><td>500</td></tr>
-					<tr><td>47</td><td class="red">红27</td><td>24000</td><td>1200</td><td>510</td></tr>
-					<tr><td>48</td><td class="red">红28</td><td>24500</td><td>1225</td><td>520</td></tr>
-					<tr><td>49</td><td class="red">红29</td><td>25000</td><td>1250</td><td>530</td></tr>
-					<tr><td>50</td><td class="red">红30</td><td>25500</td><td>1275</td><td>540</td></tr>
+                    <tr><td>21</td><td class="red">红1</td><td>11000</td><td>550</td><td>250</td></tr>
+                    <tr><td>22</td><td class="red">红2</td><td>11500</td><td>575</td><td>260</td></tr>
+                    <tr><td>23</td><td class="red">红3</td><td>12000</td><td>600</td><td>270</td></tr>
+                    <tr><td>24</td><td class="red">红4</td><td>12500</td><td>625</td><td>280</td></tr>
+                    <tr><td>25</td><td class="red">红5</td><td>13000</td><td>650</td><td>290</td></tr>
+                    <tr><td>26</td><td class="red">红6</td><td>13500</td><td>675</td><td>300</td></tr>
+                    <tr><td>27</td><td class="red">红7</td><td>14000</td><td>700</td><td>310</td></tr>
+                    <tr><td>28</td><td class="red">红8</td><td>14500</td><td>725</td><td>320</td></tr>
+                    <tr><td>29</td><td class="red">红9</td><td>15000</td><td>750</td><td>330</td></tr>
+                    <tr><td>30</td><td class="red">红10</td><td>15500</td><td>775</td><td>340</td></tr>
+                    <tr><td>31</td><td class="red">红11</td><td>16000</td><td>800</td><td>350</td></tr>
+                    <tr><td>32</td><td class="red">红12</td><td>16500</td><td>825</td><td>360</td></tr>
+                    <tr><td>33</td><td class="red">红13</td><td>17000</td><td>850</td><td>370</td></tr>
+                    <tr><td>34</td><td class="red">红14</td><td>17500</td><td>875</td><td>380</td></tr>
+                    <tr><td>35</td><td class="red">红15</td><td>18000</td><td>900</td><td>390</td></tr>
+                    <tr><td>36</td><td class="red">红16</td><td>18500</td><td>925</td><td>400</td></tr>
+                    <tr><td>37</td><td class="red">红17</td><td>19000</td><td>950</td><td>410</td></tr>
+                    <tr><td>38</td><td class="red">红18</td><td>19500</td><td>975</td><td>420</td></tr>
+                    <tr><td>39</td><td class="red">红19</td><td>20000</td><td>1000</td><td>430</td></tr>
+                    <tr><td>40</td><td class="red">红20</td><td>20500</td><td>1025</td><td>440</td></tr>
+                    <tr><td>41</td><td class="red">红21</td><td>21000</td><td>1050</td><td>450</td></tr>
+                    <tr><td>42</td><td class="red">红22</td><td>21500</td><td>1075</td><td>460</td></tr>
+                    <tr><td>43</td><td class="red">红23</td><td>22000</td><td>1100</td><td>470</td></tr>
+                    <tr><td>44</td><td class="red">红24</td><td>22500</td><td>1125</td><td>480</td></tr>
+                    <tr><td>45</td><td class="red">红25</td><td>23000</td><td>1150</td><td>490</td></tr>
+                    <tr><td>46</td><td class="red">红26</td><td>23500</td><td>1175</td><td>500</td></tr>
+                    <tr><td>47</td><td class="red">红27</td><td>24000</td><td>1200</td><td>510</td></tr>
+                    <tr><td>48</td><td class="red">红28</td><td>24500</td><td>1225</td><td>520</td></tr>
+                    <tr><td>49</td><td class="red">红29</td><td>25000</td><td>1250</td><td>530</td></tr>
+                    <tr><td>50</td><td class="red">红30</td><td>25500</td><td>1275</td><td>540</td></tr>
                 </tbody>
             </table>
         </div>
@@ -402,35 +411,41 @@
             6: [3500, 175, 0], 7: [4000, 200, 0], 8: [4500, 225, 0], 9: [5000, 250, 0], 10: [5500, 275, 0],
             11: [6000, 300, 150], 12: [6500, 325, 160], 13: [7000, 350, 170], 14: [7500, 375, 180], 15: [8000, 400, 190],
             16: [8500, 425, 200], 17: [9000, 450, 210], 18: [9500, 475, 220], 19: [10000, 500, 230], 20: [10500, 525, 240],
-			21: [11000, 550, 250] ,22: [11500, 575, 260] ,23: [12000, 600, 270] ,24: [12500, 625, 280] ,25: [13000, 650, 290] ,
-			26: [13500, 675, 300] ,27: [14000, 700, 310] ,28: [14500, 725, 320] ,29: [15000, 750, 330] ,30: [15500, 775, 340] ,
-			31: [16000, 800, 350] ,32: [16500, 825, 360] ,33: [17000, 850, 370] ,34: [17500, 875, 380] ,35: [18000, 900, 390] ,
-			36: [18500, 925, 400] ,37: [19000, 950, 410] ,38: [19500, 975, 420] ,39: [20000, 1000, 430] ,40: [20500, 1025, 440] ,
-			41: [21000, 1050, 450] ,42: [21500, 1075, 460] ,43: [22000, 1100, 470] ,44: [22500, 1125, 480] ,45: [23000, 1150, 490] ,
-			46: [23500, 1175, 500] ,47: [24000, 1200, 510] ,48: [24500, 1225, 520] ,49: [25000, 1250, 530] ,50: [25500, 1275, 540]
+            21: [11000, 550, 250], 22: [11500, 575, 260], 23: [12000, 600, 270], 24: [12500, 625, 280], 25: [13000, 650, 290],
+            26: [13500, 675, 300], 27: [14000, 700, 310], 28: [14500, 725, 320], 29: [15000, 750, 330], 30: [15500, 775, 340],
+            31: [16000, 800, 350], 32: [16500, 825, 360], 33: [17000, 850, 370], 34: [17500, 875, 380], 35: [18000, 900, 390],
+            36: [18500, 925, 400], 37: [19000, 950, 410], 38: [19500, 975, 420], 39: [20000, 1000, 430], 40: [20500, 1025, 440],
+            41: [21000, 1050, 450], 42: [21500, 1075, 460], 43: [22000, 1100, 470], 44: [22500, 1125, 480], 45: [23000, 1150, 490],
+            46: [23500, 1175, 500], 47: [24000, 1200, 510], 48: [24500, 1225, 520], 49: [25000, 1250, 530], 50: [25500, 1275, 540]
         };
         const levelNameMap = {
             1: "绿1", 2: "绿2", 3: "绿3", 4: "绿4", 5: "绿5",
             6: "蓝1", 7: "蓝2", 8: "蓝3", 9: "蓝4", 10: "蓝5",
             11: "紫1", 12: "紫2", 13: "紫3", 14: "紫4", 15: "紫5",
             16: "紫6", 17: "紫7", 18: "紫8", 19: "紫9", 20: "紫10",
-			21: "红1", 22: "红2", "23": "红3", "24": "红4", "25": "红5",
-			26: "红6", 27:  "红7",  28: "红8",  29: "红9",  30: "红10",
-			31: "红11", 32: "红12", 33: "红13", 34: "红14", 35: "红15",
-			36: "红16", 37: "红17", 38: "红18", 39: "红19", 40: "红20",
-			41: "红21", 42: "红22", 43: "红23", 44: "红24", 45: "红25",
-			46: "红26", 47: "红27", 48: "红28", 49: "红29", 50: "红30"
+            21: "红1", 22: "红2", 23: "红3", 24: "红4", 25: "红5",
+            26: "红6", 27: "红7", 28: "红8", 29: "红9", 30: "红10",
+            31: "红11", 32: "红12", 33: "红13", 34: "红14", 35: "红15",
+            36: "红16", 37: "红17", 38: "红18", 39: "红19", 40: "红20",
+            41: "红21", 42: "红22", 43: "红23", 44: "红24", 45: "红25",
+            46: "红26", 47: "红27", 48: "红28", 49: "红29", 50: "红30"
         };
 
         let charData = {
-            1: { saved: false }, 2: { saved: false }, 3: { saved: false }, 4: { saved: false }
+            1: { saved: false }, 2: { saved: false }, 3: { saved: false }, 4: { saved: false },
+            5: { saved: false }, 6: { saved: false }
         };
         let currentChar = "1";
 
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.character-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    document.querySelectorAll('.character-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.character-btn').forEach(b => {
+                        b.classList.remove('active');
+                        if (b.classList.contains('saved')) {
+                            b.classList.add('saved');
+                        }
+                    });
                     btn.classList.add('active');
                     currentChar = btn.dataset.char;
                     loadCharData(currentChar);
@@ -453,8 +468,12 @@
                 saved: true
             };
             charData[currentChar] = data;
-            document.querySelector(`.character-btn[data-char="${currentChar}"]`).style.backgroundColor = "#52c41a";
-            document.querySelector(`.character-btn[data-char="${currentChar}"]`).style.color = "#fff";
+            
+            // 更新按钮样式
+            const btn = document.querySelector(`.character-btn[data-char="${currentChar}"]`);
+            btn.classList.add('saved');
+            btn.classList.remove('active');
+            
             alert(`神兵${currentChar}数据已保存！`);
         }
 
@@ -469,14 +488,14 @@
         function calculateTotal() {
             const allSaved = Object.values(charData).every(c => c.saved);
             if (!allSaved) {
-                document.getElementById('total-result').innerHTML = '<p style="color:#f5222d;"><strong>汇总结果：</strong>请先保存4个神兵的数据！</p>';
+                document.getElementById('total-result').innerHTML = '<p style="color:#f5222d;"><strong>汇总结果：</strong>请先保存6个神兵的数据！</p>';
                 return;
             }
 
             // 计算所有神兵的总材料需求（累计所有等级）
             let totalZitan = 0, totalJingjin = 0, totalQingjin = 0;
             
-            for (let charId = 1; charId <= 4; charId++) {
+            for (let charId = 1; charId <= 6; charId++) {
                 const data = charData[charId];
                 if (data.targetLevel < data.currentLevel) {
                     document.getElementById('total-result').innerHTML = `<p style="color:#f5222d;">错误：神兵${charId}的目标等级必须大于当前等级</p>`;
@@ -524,7 +543,7 @@
             const coinGap = isEnough ? 0 : totalCoinNeed - totalActivityCoin;
 
             const totalHtml = `
-                <p><strong>4神兵汇总结果：</strong></p>
+                <p><strong>6神兵汇总结果：</strong></p>
                 <p><strong>1. 总材料需求：</strong>
                   紫檀木<span class="need-more">${totalZitan}</span> | 
                   精金<span class="need-more">${totalJingjin}</span> | 
