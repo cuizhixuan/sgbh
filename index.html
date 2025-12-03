@@ -541,9 +541,69 @@
             const totalActivityCoin = parseInt(document.getElementById('total-activity-coin').value) || 0;
             const isEnough = totalCoinNeed <= totalActivityCoin;
             const coinGap = isEnough ? 0 : totalCoinNeed - totalActivityCoin;
+			
+			// 生成各个神兵的等级信息（按步、弓、骑分3行展示）
+			let charLevelsHtml = '';
+			let buChars = [], gongChars = [], qiChars = [];
+
+			// 按兵种分类神兵
+			for (let charId = 1; charId <= 6; charId++) {
+				const data = charData[charId];
+				const charName = document.querySelector(`.character-btn[data-char="${charId}"]`).textContent;
+				const charInfo = {
+					name: charName,
+					currentLevel: data.currentLevel,
+					targetLevel: data.targetLevel,
+					currentLevelName: levelNameMap[data.currentLevel],
+					targetLevelName: levelNameMap[data.targetLevel]
+				};
+				
+				// 根据神兵ID判断兵种（假设1-2为步，3-4为弓，5-6为骑）
+				if (charId <= 2) {
+					buChars.push(charInfo);
+				} else if (charId <= 4) {
+					gongChars.push(charInfo);
+				} else {
+					qiChars.push(charInfo);
+				}
+			}
+
+			// 生成步兵行
+			charLevelsHtml += `<div style="margin-bottom: 8px;"><strong>步：</strong>`;
+			buChars.forEach((char, index) => {
+				charLevelsHtml += `${char.name}: ${char.currentLevelName} → ${char.targetLevelName}`;
+				if (index < buChars.length - 1) {
+					charLevelsHtml += ' | ';
+				}
+			});
+			charLevelsHtml += '</div>';
+
+			// 生成弓兵行
+			charLevelsHtml += `<div style="margin-bottom: 8px;"><strong>弓：</strong>`;
+			gongChars.forEach((char, index) => {
+				charLevelsHtml += `${char.name}: ${char.currentLevelName} → ${char.targetLevelName}`;
+				if (index < gongChars.length - 1) {
+					charLevelsHtml += ' | ';
+				}
+			});
+			charLevelsHtml += '</div>';
+
+			// 生成骑兵行
+			charLevelsHtml += `<div style="margin-bottom: 8px;"><strong>骑：</strong>`;
+			qiChars.forEach((char, index) => {
+				charLevelsHtml += `${char.name}: ${char.currentLevelName} → ${char.targetLevelName}`;
+				if (index < qiChars.length - 1) {
+					charLevelsHtml += ' | ';
+				}
+			});
+			charLevelsHtml += '</div>';
 
             const totalHtml = `
                 <p><strong>6神兵汇总结果：</strong></p>
+				<div style="margin-bottom: 10px;">
+					<p><strong>各神兵升级规划：</strong></p>
+					${charLevelsHtml}
+				</div>
                 <p><strong>1. 总材料需求：</strong>
                   紫檀木<span class="need-more">${totalZitan}</span> | 
                   精金<span class="need-more">${totalJingjin}</span> | 
