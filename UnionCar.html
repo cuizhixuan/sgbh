@@ -295,6 +295,14 @@
             font-weight: 700;
         }
         
+        .zero-merit {
+            color: #e74c3c;
+            font-weight: 700;
+            background-color: #fdf2f2;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
         .data-preview {
             margin-top: 25px;
             padding-top: 20px;
@@ -492,6 +500,71 @@
         .success-message.show {
             display: block;
         }
+        
+        .filter-checkbox {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .filter-checkbox input {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .filter-checkbox label {
+            font-size: 1rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .data-tabs {
+            margin-bottom: 20px;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab-button {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #7f8c8d;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab-button:hover {
+            color: #4a6fa5;
+        }
+        
+        .tab-button.active {
+            color: #4a6fa5;
+            border-bottom-color: #4a6fa5;
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .preview-note {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -537,10 +610,15 @@
                     </div>
                 </div>
                 
+                <div class="filter-checkbox">
+                    <input type="checkbox" id="filterZeroMerit" checked>
+                    <label for="filterZeroMerit">过滤周功勋为0的成员</label>
+                </div>
+                
                 <div class="controls">
                     <div class="control-group">
                         <label for="playerCount">抽取人数 (N)</label>
-                        <input type="number" id="playerCount" class="control-input" min="1" max="50" value="4" placeholder="输入要抽取的人数">
+                        <input type="number" id="playerCount" class="control-input" min="1" max="50" value="5" placeholder="输入要抽取的人数">
                     </div>
                     
                     <div class="button-group">
@@ -576,6 +654,10 @@
                             <div class="stat-label">总成员数</div>
                         </div>
                         <div class="stat-item">
+                            <div class="stat-value" id="filteredPlayers">0</div>
+                            <div class="stat-label">过滤成员数</div>
+                        </div>
+                        <div class="stat-item">
                             <div class="stat-value" id="avgWeeklyMerit">0</div>
                             <div class="stat-label">平均周功勋</div>
                         </div>
@@ -595,25 +677,61 @@
                     </div>
                     
                     <div class="data-preview">
-                        <h3>全部成员数据</h3>
-                        <div class="preview-table-container">
-                            <table class="preview-table" id="dataPreview">
-                                <thead>
-                                    <tr>
-                                        <th>序号</th>
-                                        <th>成员名称</th>
-                                        <th>阶级</th>
-                                        <th>火炉等级</th>
-                                        <th>战力</th>
-                                        <th>周功勋</th>
-                                        <th>总功勋</th>
-                                        <th>周捐献</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="previewTableBody">
-                                    <!-- 这里将通过JavaScript动态填充 -->
-                                </tbody>
-                            </table>
+                        <div class="data-tabs">
+                            <div class="tab-buttons">
+                                <button class="tab-button active" data-tab="all">全部成员数据</button>
+                                <button class="tab-button" data-tab="qualified">符合条件成员</button>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content active" id="tab-all">
+                            <div class="preview-note">
+                                显示所有成员数据（共<span id="totalPlayersNote">0</span>人），包括不符合条件的成员
+                            </div>
+                            <div class="preview-table-container">
+                                <table class="preview-table" id="dataPreview">
+                                    <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>成员名称</th>
+                                            <th>阶级</th>
+                                            <th>火炉等级</th>
+                                            <th>战力</th>
+                                            <th>周功勋</th>
+                                            <th>总功勋</th>
+                                            <th>周捐献</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="previewTableBody">
+                                        <!-- 这里将通过JavaScript动态填充 -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="tab-qualified">
+                            <div class="preview-note">
+                                仅显示符合条件（周功勋大于平均值）的成员（共<span id="qualifiedPlayersNote">0</span>人）
+                            </div>
+                            <div class="preview-table-container">
+                                <table class="preview-table" id="qualifiedPreview">
+                                    <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>成员名称</th>
+                                            <th>阶级</th>
+                                            <th>火炉等级</th>
+                                            <th>战力</th>
+                                            <th>周功勋</th>
+                                            <th>总功勋</th>
+                                            <th>周捐献</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="qualifiedTableBody">
+                                        <!-- 这里将通过JavaScript动态填充 -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -627,7 +745,7 @@
     </div>
 
     <script>
-        // 示例数据
+        // 示例数据（包含周功勋为0的测试数据）
         const sampleData = `        成员名称                 阶级      火炉等级    战力           周功勋         总功勋         周捐献         
 1       万里独行                 3         宫阙1级     113962916      1090764728     3880879336     141600         
 2       阿音丶                   5         宫阙2级     109487353      919738654      3314841732     156960         
@@ -649,7 +767,10 @@
 18      狄大人                   3         宫阙1级     112061363      525834368      1776613464     151200         
 19      苟老板爱啃骨头           3         宫阙1级     106799736      352832208      1725559886     116880         
 20      豫语鱼雨                 3         宫阙1级     117901597      307358298      1628223182     33120          
-21      征霸天下                 3         宫阙1级     134423542      500105142      1590648144     166080         `;
+21      征霸天下                 3         宫阙1级     134423542      500105142      1590648144     166080         
+22      测试成员1                3         宫阙1级     100000000      0              1000000000     0              
+23      测试成员2                2         宫阙1级     95000000       0              950000000      12000          
+24      测试成员3                4         宫阙2级     110000000      1200000        2000000000     24000          `;
 
         // DOM元素
         const dataInput = document.getElementById('dataInput');
@@ -659,22 +780,48 @@
         const clearInputBtnMobile = document.getElementById('clearInputBtnMobile');
         const loadSampleDataBtn = document.getElementById('loadSampleData');
         const loadSampleDataBtnMobile = document.getElementById('loadSampleDataMobile');
+        const filterZeroMeritCheckbox = document.getElementById('filterZeroMerit');
         const errorMessage = document.getElementById('errorMessage');
         const successMessage = document.getElementById('successMessage');
         const resultContainer = document.getElementById('resultContainer');
         const emptyState = document.getElementById('emptyState');
         const selectedPlayers = document.getElementById('selectedPlayers');
         const previewTableBody = document.getElementById('previewTableBody');
+        const qualifiedTableBody = document.getElementById('qualifiedTableBody');
         const totalPlayersEl = document.getElementById('totalPlayers');
         const avgWeeklyMeritEl = document.getElementById('avgWeeklyMerit');
         const qualifiedPlayersEl = document.getElementById('qualifiedPlayers');
         const extractedCountEl = document.getElementById('extractedCount');
+        const filteredPlayersEl = document.getElementById('filteredPlayers');
         const loadingIndicator = document.getElementById('loadingIndicator');
+        const totalPlayersNote = document.getElementById('totalPlayersNote');
+        const qualifiedPlayersNote = document.getElementById('qualifiedPlayersNote');
+        
+        // 标签切换功能
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        // 标签切换事件
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                
+                // 更新按钮状态
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // 更新内容显示
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(`tab-${tabId}`).classList.add('active');
+            });
+        });
 
         // 加载示例数据
         function loadSampleData() {
             dataInput.value = sampleData;
-            showSuccess('示例数据已加载');
+            showSuccess('示例数据已加载（包含测试数据）');
         }
 
         // 清空输入框
@@ -710,6 +857,8 @@
         function parseData(inputText) {
             const lines = inputText.trim().split('\n');
             const players = [];
+            let filteredCount = 0;
+            const shouldFilterZeroMerit = filterZeroMeritCheckbox.checked;
             
             // 跳过标题行（如果有）
             let startIndex = 0;
@@ -738,11 +887,18 @@
                         totalMerit: parseInt(parts[6]) || 0,
                         weeklyDonation: parseInt(parts[7]) || 0
                     };
+                    
+                    // 过滤周功勋为0的玩家
+                    if (shouldFilterZeroMerit && player.weeklyMerit === 0) {
+                        filteredCount++;
+                        continue;
+                    }
+                    
                     players.push(player);
                 }
             }
             
-            return players;
+            return { players, filteredCount };
         }
 
         // 计算平均周功勋
@@ -778,12 +934,17 @@
         }
 
         // 显示抽取结果
-        function displayResults(players, qualifiedPlayers, extractedPlayers, averageWeeklyMerit) {
+        function displayResults(players, qualifiedPlayers, extractedPlayers, averageWeeklyMerit, filteredCount) {
             // 更新统计数据
             totalPlayersEl.textContent = players.length;
+            filteredPlayersEl.textContent = filteredCount;
             avgWeeklyMeritEl.textContent = formatNumber(averageWeeklyMerit);
             qualifiedPlayersEl.textContent = qualifiedPlayers.length;
             extractedCountEl.textContent = extractedPlayers.length;
+            
+            // 更新标签页中的统计信息
+            totalPlayersNote.textContent = players.length;
+            qualifiedPlayersNote.textContent = qualifiedPlayers.length;
             
             // 显示抽取的玩家
             selectedPlayers.innerHTML = '';
@@ -840,18 +1001,53 @@
                 });
             }
             
-            // 显示数据预览表格
+            // 显示全部成员数据预览表格
             previewTableBody.innerHTML = '';
             
             players.forEach(player => {
                 const isQualified = player.weeklyMerit > averageWeeklyMerit;
                 const isExtracted = extractedPlayers.some(p => p.id === player.id);
+                const hasZeroMerit = player.weeklyMerit === 0;
                 
                 const row = document.createElement('tr');
                 if (isExtracted) {
                     row.style.backgroundColor = '#e8f4ff';
                     row.style.fontWeight = 'bold';
                 } else if (isQualified) {
+                    row.style.backgroundColor = '#f0f9f0';
+                } else if (hasZeroMerit) {
+                    row.style.backgroundColor = '#fdf2f2';
+                }
+                
+                const weeklyMeritDisplay = hasZeroMerit 
+                    ? `<span class="zero-merit">${formatNumber(player.weeklyMerit)}</span>` 
+                    : `<span class="${isQualified ? 'highlight' : ''}">${formatNumber(player.weeklyMerit)}</span>`;
+                
+                row.innerHTML = `
+                    <td>${player.id}</td>
+                    <td>${player.name}</td>
+                    <td>${player.rank}</td>
+                    <td>${player.stoveLevel}</td>
+                    <td>${formatNumber(player.combatPower)}</td>
+                    <td>${weeklyMeritDisplay}</td>
+                    <td>${formatNumber(player.totalMerit)}</td>
+                    <td>${formatNumber(player.weeklyDonation)}</td>
+                `;
+                
+                previewTableBody.appendChild(row);
+            });
+            
+            // 显示符合条件成员数据预览表格
+            qualifiedTableBody.innerHTML = '';
+            
+            qualifiedPlayers.forEach(player => {
+                const isExtracted = extractedPlayers.some(p => p.id === player.id);
+                
+                const row = document.createElement('tr');
+                if (isExtracted) {
+                    row.style.backgroundColor = '#e8f4ff';
+                    row.style.fontWeight = 'bold';
+                } else {
                     row.style.backgroundColor = '#f0f9f0';
                 }
                 
@@ -861,12 +1057,12 @@
                     <td>${player.rank}</td>
                     <td>${player.stoveLevel}</td>
                     <td>${formatNumber(player.combatPower)}</td>
-                    <td class="${isQualified ? 'highlight' : ''}">${formatNumber(player.weeklyMerit)}</td>
+                    <td class="highlight">${formatNumber(player.weeklyMerit)}</td>
                     <td>${formatNumber(player.totalMerit)}</td>
                     <td>${formatNumber(player.weeklyDonation)}</td>
                 `;
                 
-                previewTableBody.appendChild(row);
+                qualifiedTableBody.appendChild(row);
             });
             
             // 显示结果区域
@@ -906,9 +1102,9 @@
             setTimeout(() => {
                 try {
                     // 解析数据
-                    const players = parseData(inputText);
+                    const { players, filteredCount } = parseData(inputText);
                     if (players.length === 0) {
-                        showError('无法解析数据，请检查格式是否正确');
+                        showError('无法解析数据，或所有成员都被过滤了');
                         loadingIndicator.classList.remove('show');
                         return;
                     }
@@ -934,10 +1130,11 @@
                     const extractedPlayers = getRandomItems(qualifiedPlayers, Math.min(playerCount, qualifiedPlayers.length));
                     
                     // 显示结果
-                    displayResults(players, qualifiedPlayers, extractedPlayers, averageWeeklyMerit);
+                    displayResults(players, qualifiedPlayers, extractedPlayers, averageWeeklyMerit, filteredCount);
                     
                     // 显示成功消息
-                    showSuccess(`成功抽取 ${extractedPlayers.length} 位队长！`);
+                    const filterStatus = filterZeroMeritCheckbox.checked ? '（已过滤周功勋为0的成员）' : '';
+                    showSuccess(`成功抽取 ${extractedPlayers.length} 位队长！${filterStatus}`);
                     
                     // 隐藏加载指示器
                     loadingIndicator.classList.remove('show');
