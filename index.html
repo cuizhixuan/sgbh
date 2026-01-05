@@ -2,410 +2,714 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>阶位材料升级计算器（冰球弹弹乐）</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>阶位材料升级计算器</title>
     <style>
+        :root {
+            --primary-color: #2a8cff;
+            --primary-dark: #1a7ae6;
+            --secondary-color: #32d74b;
+            --danger-color: #ff453a;
+            --warning-color: #ff9f0a;
+            --text-primary: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --text-tertiary: #8e8e93;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f2f2f7;
+            --bg-tertiary: #e5e5ea;
+            --border-color: #c7c7cc;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 12px;
+            --spacing-lg: 16px;
+            --spacing-xl: 24px;
+            --font-size-xs: 12px;
+            --font-size-sm: 14px;
+            --font-size-md: 16px;
+            --font-size-lg: 18px;
+            --font-size-xl: 20px;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Arial", "Microsoft YaHei", sans-serif;
-        }
-        body {
-            background-color: #f5f5f5;
-            padding-bottom: 30px;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            padding-bottom: 20px;
-        }
-        h1 {
-            text-align: center;
-            color: #fff;
-            padding: 15px 0;
-            font-size: 20px;
-            background-color: #409eff;
-            margin: 0 0 15px 0;
-            border-radius: 8px 8px 0 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .input-panel {
-            background-color: #fff;
-            border-radius: 6px;
-            margin: 0 15px 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            overflow: hidden;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding-bottom: 80px;
+            max-width: 100vw;
+            overflow-x: hidden;
         }
-        .panel-header {
-            padding: 12px 15px;
-            background-color: #f0f2f5;
-            cursor: pointer;
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: var(--spacing-md);
+        }
+
+        /* 顶部标题栏 */
+        .header {
+            background-color: var(--bg-primary);
+            padding: var(--spacing-lg) var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--card-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .header .subtitle {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* 兵种分组容器（合并后的卡片） */
+        .class-group-card {
+            background-color: var(--bg-primary);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            box-shadow: var(--card-shadow);
+            margin-bottom: var(--spacing-md);
+        }
+
+        /* 兵种分组标题 */
+        .class-group-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .class-group-header h2 {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .class-group-header.infantry h2 { color: #2a8cff; }
+        .class-group-header.cavalry h2 { color: #32d74b; }
+        .class-group-header.archer h2 { color: #ff9f0a; }
+
+        .class-group-header::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 16px;
+            border-radius: 2px;
+        }
+        .class-group-header.infantry::before { background-color: #2a8cff; }
+        .class-group-header.cavalry::before { background-color: #32d74b; }
+        .class-group-header.archer::before { background-color: #ff9f0a; }
+
+        /* 角色行（合并后每个兵种下的角色行） */
+        .character-row {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+        .character-row:last-child { margin-bottom: 0; }
+
+        .character-row-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-weight: bold;
-            color: #333;
-            border-bottom: 1px solid #eee;
         }
-        .panel-content {
-            padding: 15px;
+
+        .character-name {
+            font-size: var(--font-size-md);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* 等级选择器 - 简化动画，锁死宽度，修正箭头 */
+        .level-selectors {
+            display: flex;
+            gap: var(--spacing-md);
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .level-selector {
+            flex: 1;
+            min-width: 0 !important;
+            max-width: calc(50% - var(--spacing-md)/2) !important;
+            width: calc(50% - var(--spacing-md)/2) !important;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .level-selector label {
             display: block;
-            max-height: 120vh;
-            overflow-y: auto;
-        }
-
-        .character-selector {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-        }
-        .character-btn {
-            flex: 1;
-            min-width: 120px;
-            margin: 0;
-            padding: 8px;
-            border: 1px solid #ddd;
-            background-color: #fafafa;
-            cursor: pointer;
-            text-align: center;
-            font-size: 14px;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-        .character-btn.active {
-            background-color: #409eff;
-            color: white;
-            border-color: #409eff;
-        }
-        .character-btn.saved {
-            background-color: #52c41a;
-            color: white;
-            border-color: #52c41a;
-        }
-        .input-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .input-item {
-            flex: 1;
-            min-width: 140px;
-        }
-        label {
-            display: block;
-            margin-bottom: 4px;
-            color: #666;
-            font-size: 13px;
-        }
-        select, input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        input {
-            -moz-appearance: textfield;
-        }
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        .global-owned-materials {
-            background-color: #f6ffed;
-            padding: 10px;
-            border-radius: 4px;
-            margin: 10px 0;
-            border-left: 4px solid #52c41a;
-        }
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        button {
-            flex: 1;
-            padding: 10px;
-            background-color: #409eff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        button:hover {
-            background-color: #3086e8;
-        }
-        button#calculate-all {
-            background-color: #1890ff;
-        }
-
-        .results-section {
-            padding: 0 15px;
-        }
-        .total-result {
-            background-color: #fffbe6;
-            border-left: 4px solid #faad14;
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 4px;
-        }
-        .need-more { color: #f5222d; font-weight: bold; }
-        .enough { color: #52c41a; font-weight: bold; }
-        .package-count { color: #722ed1; font-weight: bold; }
-
-        .table-wrapper {
-            width: 100%;
-            overflow-x: auto;
-            margin-top: 20px;
-            padding: 0 15px;
-        }
-        .material-table {
-            min-width: 500px;
-            border-collapse: collapse;
-            text-align: center;
-            font-size: 13px;
-            width: 100%;
-        }
-        .material-table th, .material-table td {
-            padding: 8px;
-            border: 1px solid #eee;
-        }
-        .material-table th {
-            background-color: #fafafa;
-            color: #666;
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-xs);
             font-weight: 500;
         }
-        .material-table tr:nth-child(even) {
-            background-color: #f9f9f9;
+
+        /* 修正箭头：垂直居中对齐，不再靠下 */
+        .select-wrapper {
+            width: 100% !important;
+            height: 44px !important;
+            overflow: hidden !important;
+            position: relative;
         }
-        .green { color: #52c41a; font-weight: 500; }
-        .blue { color: #1890ff; font-weight: 500; }
-        .purple { color: #722ed1; font-weight: 500; }
-        .red { color: red; font-weight: 500; }
+
+        .select-wrapper select {
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 0 !important;
+            height: 100% !important;
+            padding: 0 12px !important;
+            font-size: var(--font-size-md);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            resize: none !important;
+            white-space: nowrap;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            box-sizing: border-box !important;
+        }
+
+        /* 下拉箭头：精准垂直居中，修正靠下问题 */
+        .select-wrapper::after {
+            content: '';
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%); /* 精准居中，解决靠下问题 */
+            width: 16px;
+            height: 16px;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236e6e73' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-size: contain;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .select-wrapper select:disabled {
+            background-color: var(--bg-secondary);
+            color: var(--text-tertiary);
+            cursor: not-allowed;
+        }
+
+        /* 目标option仅保留可选项，不可选的直接不渲染 */
+        .select-wrapper select option {
+            width: 200px !important;
+            max-width: 200px !important;
+            min-width: 0 !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            padding: 8px 12px !important;
+            font-size: var(--font-size-sm) !important;
+            box-sizing: border-box !important;
+            display: block !important;
+        }
+
+        /* 浏览器兼容兜底 */
+        @-moz-document url-prefix() {
+            .select-wrapper select {
+                text-indent: 0.01px;
+                text-overflow: '';
+                border: 1px solid var(--border-color) !important;
+            }
+        }
+
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            .select-wrapper select {
+                border: 1px solid var(--border-color) !important;
+            }
+            .select-wrapper select option {
+                width: 200px !important;
+            }
+        }
+
+        .char-status {
+            font-size: var(--font-size-xs);
+            color: var(--text-secondary);
+            margin-top: var(--spacing-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--text-tertiary);
+        }
+
+        /* 材料输入区域 */
+        .materials-input {
+            background-color: var(--bg-primary);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+            box-shadow: var(--card-shadow);
+        }
+
+        .materials-input h3 {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            color: var(--text-primary);
+        }
+
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .material-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .material-item label {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-xs);
+            font-weight: 500;
+        }
+
+        .material-item input {
+            padding: 10px 12px;
+            font-size: var(--font-size-md);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .material-item input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        /* 礼包设置 */
+        .package-settings {
+            background-color: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            padding: var(--spacing-md);
+            margin-top: var(--spacing-md);
+        }
+
+        .package-settings h4 {
+            font-size: var(--font-size-md);
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            color: var(--text-primary);
+        }
+
+        /* 按钮组：移除缩放动画，简化交互 */
+        .button-group {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--bg-primary);
+            padding: var(--spacing-md);
+            display: flex;
+            gap: var(--spacing-md);
+            box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+        }
+
+        .button-group button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease; /* 仅保留背景色过渡，移除缩放 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+        }
+
+        #calculate-all {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        #calculate-all:active {
+            background-color: #2cc142; /* 仅保留背景色变化，移除transform: scale */
+        }
+
+        /* 结果区域：移除淡入动画，简化样式 */
+        .results-section {
+            background-color: var(--bg-primary);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            margin-top: var(--spacing-md);
+            box-shadow: var(--card-shadow);
+        }
+
+        .result-summary {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .result-summary h3 {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            color: var(--text-primary);
+        }
+
+        .result-item {
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-item h4 {
+            font-size: var(--font-size-md);
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            color: var(--text-primary);
+        }
+
+        .result-content {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+        }
+
+        .result-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-xs);
+            font-weight: 600;
+            margin-left: var(--spacing-sm);
+        }
+
+        .badge-enough {
+            background-color: rgba(50, 215, 75, 0.1);
+            color: var(--secondary-color);
+        }
+
+        .badge-need {
+            background-color: rgba(255, 69, 58, 0.1);
+            color: var(--danger-color);
+        }
+
+        /* 响应式调整：锁死宽度，无额外动画 */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 768px;
+                margin: 0 auto;
+            }
+            .character-row {
+                flex-direction: row;
+                align-items: center;
+            }
+            .level-selector {
+                max-width: calc(50% - var(--spacing-md)/2) !important;
+                width: calc(50% - var(--spacing-md)/2) !important;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>阶位材料升级计算器（冰球弹弹乐）</h1>
+        <!-- 顶部标题栏 -->
+        <div class="header">
+            <h1>阶位材料升级计算器</h1>
+            <div class="subtitle">冰球弹弹乐 · 神兵进阶规划</div>
+        </div>
 
-        <div class="input-panel">
-            <div class="panel-header" id="input-panel-header">
-                <span>输入与设置</span>
-                <span id="panel-icon">▼</span>
+        <!-- 神兵输入区域 -->
+        <div class="characters-container">
+            <!-- 步兵组 -->
+            <div class="class-group-card">
+                <div class="class-group-header infantry">
+                    <h2>步兵</h2>
+                </div>
+                
+                <!-- 步兵1 -->
+                <div class="character-row">
+                    <div class="character-row-header">
+                        <div class="character-name">步1</div>
+                    </div>
+                    <div class="level-selectors">
+                        <div class="level-selector">
+                            <label for="current-level-1">当前等级</label>
+                            <div class="select-wrapper">
+                                <select id="current-level-1" class="current-level-select"></select>
+                            </div>
+                        </div>
+                        <div class="level-selector">
+                            <label for="target-level-1">目标等级</label>
+                            <div class="select-wrapper">
+                                <select id="target-level-1" class="target-level-select" disabled></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="char-status" id="char-status-1">
+                        <div class="status-dot"></div>
+                        <span id="status-text-1">请先选择当前等级</span>
+                    </div>
+                </div>
+                
+                <!-- 步兵2 -->
+                <div class="character-row">
+                    <div class="character-row-header">
+                        <div class="character-name">步2</div>
+                    </div>
+                    <div class="level-selectors">
+                        <div class="level-selector">
+                            <label for="current-level-2">当前等级</label>
+                            <div class="select-wrapper">
+                                <select id="current-level-2" class="current-level-select"></select>
+                            </div>
+                        </div>
+                        <div class="level-selector">
+                            <label for="target-level-2">目标等级</label>
+                            <div class="select-wrapper">
+                                <select id="target-level-2" class="target-level-select" disabled></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="char-status" id="char-status-2">
+                        <div class="status-dot"></div>
+                        <span id="status-text-2">请先选择当前等级</span>
+                    </div>
+                </div>
             </div>
-            <div class="panel-content" id="input-panel-content">
-                <div class="character-selector">
-                    <div class="character-btn active" data-char="1">步1</div>
-                    <div class="character-btn" data-char="2">步2</div>
-                    <div class="character-btn" data-char="3">弓1</div>
-                    <div class="character-btn" data-char="4">弓2</div>
-                    <div class="character-btn" data-char="5">骑1</div>
-                    <div class="character-btn" data-char="6">骑2</div>
+            
+            <!-- 骑兵组 -->
+            <div class="class-group-card">
+                <div class="class-group-header cavalry">
+                    <h2>骑兵</h2>
                 </div>
                 
-                <div class="input-group">
-                    <div class="input-item">
-                        <label for="current-level">当前等级</label>
-                        <select id="current-level">
-                            <option value="1">1（绿1）</option><option value="2">2（绿2）</option><option value="3">3（绿3）</option>
-                            <option value="4">4（绿4）</option><option value="5">5（绿5）</option><option value="6">6（蓝1）</option>
-                            <option value="7">7（蓝2）</option><option value="8">8（蓝3）</option><option value="9">9（蓝4）</option>
-                            <option value="10">10（蓝5）</option><option value="11">11（紫1）</option><option value="12">12（紫2）</option>
-                            <option value="13">13（紫3）</option><option value="14">14（紫4）</option><option value="15">15（紫5）</option>
-                            <option value="16">16（紫6）</option><option value="17">17（紫7）</option><option value="18">18（紫8）</option>
-                            <option value="19">19（紫9）</option><option value="20">20（紫10）</option><option value="21">21（红1）</option>
-                            <option value="22">22（红2）</option><option value="23">23（红3）</option><option value="24">24（红4）</option>
-                            <option value="25">25（红5）</option><option value="26">26（红6）</option><option value="27">27（红7）</option>
-                            <option value="28">28（红8）</option><option value="29">29（红9）</option><option value="30">30（红10）</option>
-                            <option value="31">31（红11）</option><option value="32">32（红12）</option><option value="33">33（红13）</option>
-                            <option value="34">34（红14）</option><option value="35">35（红15）</option><option value="36">36（红16）</option>
-                            <option value="37">37（红17）</option><option value="38">38（红18）</option><option value="39">39（红19）</option>
-                            <option value="40">40（红20）</option><option value="41">41（红21）</option><option value="42">42（红22）</option>
-                            <option value="43">43（红23）</option><option value="44">44（红24）</option><option value="45">45（红25）</option>
-                            <option value="46">46（红26）</option><option value="47">47（红27）</option><option value="48">48（红28）</option>
-                            <option value="49">49（红29）</option><option value="50">50（红30）</option>
-                        </select>
+                <!-- 骑兵1 -->
+                <div class="character-row">
+                    <div class="character-row-header">
+                        <div class="character-name">骑1</div>
                     </div>
-                    <div class="input-item">
-                        <label for="target-level">目标等级</label>
-                        <select id="target-level">
-                            <option value="1">1（绿1）</option><option value="2">2（绿2）</option><option value="3">3（绿3）</option>
-                            <option value="4">4（绿4）</option><option value="5">5（绿5）</option><option value="6">6（蓝1）</option>
-                            <option value="7">7（蓝2）</option><option value="8">8（蓝3）</option><option value="9">9（蓝4）</option>
-                            <option value="10">10（蓝5）</option><option value="11">11（紫1）</option><option value="12">12（紫2）</option>
-                            <option value="13">13（紫3）</option><option value="14">14（紫4）</option><option value="15">15（紫5）</option>
-                            <option value="16">16（紫6）</option><option value="17">17（紫7）</option><option value="18">18（紫8）</option>
-                            <option value="19">19（紫9）</option><option value="20">20（紫10）</option><option value="21">21（红1）</option>
-                            <option value="22">22（红2）</option><option value="23">23（红3）</option><option value="24">24（红4）</option>
-                            <option value="25">25（红5）</option><option value="26">26（红6）</option><option value="27">27（红7）</option>
-                            <option value="28">28（红8）</option><option value="29">29（红9）</option><option value="30">30（红10）</option>
-                            <option value="31">31（红11）</option><option value="32">32（红12）</option><option value="33">33（红13）</option>
-                            <option value="34">34（红14）</option><option value="35">35（红15）</option><option value="36">36（红16）</option>
-                            <option value="37">37（红17）</option><option value="38">38（红18）</option><option value="39">39（红19）</option>
-                            <option value="40">40（红20）</option><option value="41">41（红21）</option><option value="42">42（红22）</option>
-                            <option value="43">43（红23）</option><option value="44">44（红24）</option><option value="45">45（红25）</option>
-                            <option value="46">46（红26）</option><option value="47">47（红27）</option><option value="48">48（红28）</option>
-                            <option value="49">49（红29）</option><option value="50">50（红30）</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="global-owned-materials">
-                    <h3 style="margin-bottom: 8px; font-size: 15px;">全局拥有材料（所有角色共用）</h3>
-                    <div class="input-group">
-                        <div class="input-item">
-                            <label for="global-owned-zitan">已拥有紫檀木</label>
-                            <input type="number" id="global-owned-zitan" min="0" placeholder="非负整数" value="0">
+                    <div class="level-selectors">
+                        <div class="level-selector">
+                            <label for="current-level-3">当前等级</label>
+                            <div class="select-wrapper">
+                                <select id="current-level-3" class="current-level-select"></select>
+                            </div>
                         </div>
-                        <div class="input-item">
-                            <label for="global-owned-jingjin">已拥有精金</label>
-                            <input type="number" id="global-owned-jingjin" min="0" placeholder="非负整数" value="0">
-                        </div>
-                        <div class="input-item">
-                            <label for="global-owned-qingjin">已拥有青金石</label>
-                            <input type="number" id="global-owned-qingjin" min="0" placeholder="非负整数" value="0">
+                        <div class="level-selector">
+                            <label for="target-level-3">目标等级</label>
+                            <div class="select-wrapper">
+                                <select id="target-level-3" class="target-level-select" disabled></select>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="input-group">
-                    <div class="input-item">
-                        <label for="zitan-package">紫檀木礼包（单包数量）</label>
-                        <input type="number" id="zitan-package" min="1" placeholder="单包数量" value="12">
+                    <div class="char-status" id="char-status-3">
+                        <div class="status-dot"></div>
+                        <span id="status-text-3">请先选择当前等级</span>
                     </div>
-                    <div class="input-item">
-                        <label for="zitan-pkg-price">紫檀木礼包（单包价格）</label>
-                        <input type="number" id="zitan-pkg-price" min="1" placeholder="活动币" value="11">
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <div class="input-item">
-                        <label for="jingjin-package">精金礼包（单包数量）</label>
-                        <input type="number" id="jingjin-package" min="1" placeholder="单包数量" value="1">
-                    </div>
-                    <div class="input-item">
-                        <label for="jingjin-pkg-price">精金礼包（单包价格）</label>
-                        <input type="number" id="jingjin-pkg-price" min="1" placeholder="活动币" value="18">
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <div class="input-item">
-                        <label for="qingjin-package">青金石礼包（单包数量）</label>
-                        <input type="number" id="qingjin-package" min="1" placeholder="单包数量" value="1">
-                    </div>
-                    <div class="input-item">
-                        <label for="qingjin-pkg-price">青金石礼包（单包价格）</label>
-                        <input type="number" id="qingjin-pkg-price" min="1" placeholder="活动币" value="55">
-                    </div>
-                </div>
-
-                <div class="global-owned-materials">
-                    <label for="total-activity-coin"><strong>活动币数量</strong></label>
-                    <input type="number" id="total-activity-coin" min="0" placeholder="输入所有可用活动币总数" value="0">
                 </div>
                 
-                <div class="btn-group">
-                    <button id="save-char">保存</button>
-                    <button id="calculate-all">汇总计算</button>
+                <!-- 骑兵2 -->
+                <div class="character-row">
+                    <div class="character-row-header">
+                        <div class="character-name">骑2</div>
+                    </div>
+                    <div class="level-selectors">
+                        <div class="level-selector">
+                            <label for="current-level-4">当前等级</label>
+                            <div class="select-wrapper">
+                                <select id="current-level-4" class="current-level-select"></select>
+                            </div>
+                        </div>
+                        <div class="level-selector">
+                            <label for="target-level-4">目标等级</label>
+                            <div class="select-wrapper">
+                                <select id="target-level-4" class="target-level-select" disabled></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="char-status" id="char-status-4">
+                        <div class="status-dot"></div>
+                        <span id="status-text-4">请先选择当前等级</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 弓兵组 -->
+            <div class="class-group-card">
+                <div class="class-group-header archer">
+                    <h2>弓兵</h2>
+                </div>
+                
+                <!-- 弓兵1 -->
+                <div class="character-row">
+                    <div class="character-row-header">
+                        <div class="character-name">弓1</div>
+                    </div>
+                    <div class="level-selectors">
+                        <div class="level-selector">
+                            <label for="current-level-5">当前等级</label>
+                            <div class="select-wrapper">
+                                <select id="current-level-5" class="current-level-select"></select>
+                            </div>
+                        </div>
+                        <div class="level-selector">
+                            <label for="target-level-5">目标等级</label>
+                            <div class="select-wrapper">
+                                <select id="target-level-5" class="target-level-select" disabled></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="char-status" id="char-status-5">
+                        <div class="status-dot"></div>
+                        <span id="status-text-5">请先选择当前等级</span>
+                    </div>
+                </div>
+                
+                <!-- 弓兵2 -->
+                <div class="character-row">
+                    <div class="character-row-header">
+                        <div class="character-name">弓2</div>
+                    </div>
+                    <div class="level-selectors">
+                        <div class="level-selector">
+                            <label for="current-level-6">当前等级</label>
+                            <div class="select-wrapper">
+                                <select id="current-level-6" class="current-level-select"></select>
+                            </div>
+                        </div>
+                        <div class="level-selector">
+                            <label for="target-level-6">目标等级</label>
+                            <div class="select-wrapper">
+                                <select id="target-level-6" class="target-level-select" disabled></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="char-status" id="char-status-6">
+                        <div class="status-dot"></div>
+                        <span id="status-text-6">请先选择当前等级</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="results-section">
-            <div class="total-result" id="total-result">
-                <p><strong>汇总结果：</strong>请先保存6个神兵数据，再点击"汇总计算"</p>
+        <!-- 材料输入区域 -->
+        <div class="materials-input">
+            <h3>全局材料设置</h3>
+            <div class="materials-grid">
+                <div class="material-item">
+                    <label for="global-owned-zitan">已拥有紫檀木</label>
+                    <input type="number" id="global-owned-zitan" min="0" value="0">
+                </div>
+                <div class="material-item">
+                    <label for="global-owned-jingjin">已拥有精金</label>
+                    <input type="number" id="global-owned-jingjin" min="0" value="0">
+                </div>
+                <div class="material-item">
+                    <label for="global-owned-qingjin">已拥有青金石</label>
+                    <input type="number" id="global-owned-qingjin" min="0" value="0">
+                </div>
+            </div>
+            
+            <div class="package-settings">
+                <h4>礼包设置</h4>
+                <div class="materials-grid">
+                    <div class="material-item">
+                        <label for="zitan-package">紫檀木礼包</label>
+                        <input type="number" id="zitan-package" min="1" value="12">
+                    </div>
+                    <div class="material-item">
+                        <label for="zitan-pkg-price">礼包价格</label>
+                        <input type="number" id="zitan-pkg-price" min="1" value="11">
+                    </div>
+                </div>
+                <div class="materials-grid">
+                    <div class="material-item">
+                        <label for="jingjin-package">精金礼包</label>
+                        <input type="number" id="jingjin-package" min="1" value="1">
+                    </div>
+                    <div class="material-item">
+                        <label for="jingjin-pkg-price">礼包价格</label>
+                        <input type="number" id="jingjin-pkg-price" min="1" value="18">
+                    </div>
+                </div>
+                <div class="materials-grid">
+                    <div class="material-item">
+                        <label for="qingjin-package">青金石礼包</label>
+                        <input type="number" id="qingjin-package" min="1" value="1">
+                    </div>
+                    <div class="material-item">
+                        <label for="qingjin-pkg-price">礼包价格</label>
+                        <input type="number" id="qingjin-pkg-price" min="1" value="55">
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 16px;">
+                <label for="total-activity-coin" style="display: block; font-weight: 600; margin-bottom: 8px;">可用活动币</label>
+                <input type="number" id="total-activity-coin" min="0" value="0" style="width: 100%; padding: 12px; font-size: 16px;">
             </div>
         </div>
 
-        <div class="table-wrapper">
-            <h2 style="font-size: 16px; color: #333; margin: 15px 0 10px;">各阶位单阶材料需求参考</h2>
-            <table class="material-table">
-                <thead>
-                    <tr>
-                        <th>数字阶位</th>
-                        <th>阶位</th>
-                        <th>紫檀木（数量）</th>
-                        <th>精金（数量）</th>
-                        <th>青金石（数量）</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>1</td><td class="green">绿1</td><td>1000</td><td>50</td><td>0</td></tr>
-                    <tr><td>2</td><td class="green">绿2</td><td>1500</td><td>75</td><td>0</td></tr>
-                    <tr><td>3</td><td class="green">绿3</td><td>2000</td><td>100</td><td>0</td></tr>
-                    <tr><td>4</td><td class="green">绿4</td><td>2500</td><td>125</td><td>0</td></tr>
-                    <tr><td>5</td><td class="green">绿5</td><td>3000</td><td>150</td><td>0</td></tr>
-                    <tr><td>6</td><td class="blue">蓝1</td><td>3500</td><td>175</td><td>0</td></tr>
-                    <tr><td>7</td><td class="blue">蓝2</td><td>4000</td><td>200</td><td>0</td></tr>
-                    <tr><td>8</td><td class="blue">蓝3</td><td>4500</td><td>225</td><td>0</td></tr>
-                    <tr><td>9</td><td class="blue">蓝4</td><td>5000</td><td>250</td><td>0</td></tr>
-                    <tr><td>10</td><td class="blue">蓝5</td><td>5500</td><td>275</td><td>0</td></tr>
-                    <tr><td>11</td><td class="purple">紫1</td><td>6000</td><td>300</td><td>150</td></tr>
-                    <tr><td>12</td><td class="purple">紫2</td><td>6500</td><td>325</td><td>160</td></tr>
-                    <tr><td>13</td><td class="purple">紫3</td><td>7000</td><td>350</td><td>170</td></tr>
-                    <tr><td>14</td><td class="purple">紫4</td><td>7500</td><td>375</td><td>180</td></tr>
-                    <tr><td>15</td><td class="purple">紫5</td><td>8000</td><td>400</td><td>190</td></tr>
-                    <tr><td>16</td><td class="purple">紫6</td><td>8500</td><td>425</td><td>200</td></tr>
-                    <tr><td>17</td><td class="purple">紫7</td><td>9000</td><td>450</td><td>210</td></tr>
-                    <tr><td>18</td><td class="purple">紫8</td><td>9500</td><td>475</td><td>220</td></tr>
-                    <tr><td>19</td><td class="purple">紫9</td><td>10000</td><td>500</td><td>230</td></tr>
-                    <tr><td>20</td><td class="purple">紫10</td><td>10500</td><td>525</td><td>240</td></tr>
-                    <tr><td>21</td><td class="red">红1</td><td>11000</td><td>550</td><td>250</td></tr>
-                    <tr><td>22</td><td class="red">红2</td><td>11500</td><td>575</td><td>260</td></tr>
-                    <tr><td>23</td><td class="red">红3</td><td>12000</td><td>600</td><td>270</td></tr>
-                    <tr><td>24</td><td class="red">红4</td><td>12500</td><td>625</td><td>280</td></tr>
-                    <tr><td>25</td><td class="red">红5</td><td>13000</td><td>650</td><td>290</td></tr>
-                    <tr><td>26</td><td class="red">红6</td><td>13500</td><td>675</td><td>300</td></tr>
-                    <tr><td>27</td><td class="red">红7</td><td>14000</td><td>700</td><td>310</td></tr>
-                    <tr><td>28</td><td class="red">红8</td><td>14500</td><td>725</td><td>320</td></tr>
-                    <tr><td>29</td><td class="red">红9</td><td>15000</td><td>750</td><td>330</td></tr>
-                    <tr><td>30</td><td class="red">红10</td><td>15500</td><td>775</td><td>340</td></tr>
-                    <tr><td>31</td><td class="red">红11</td><td>16000</td><td>800</td><td>350</td></tr>
-                    <tr><td>32</td><td class="red">红12</td><td>16500</td><td>825</td><td>360</td></tr>
-                    <tr><td>33</td><td class="red">红13</td><td>17000</td><td>850</td><td>370</td></tr>
-                    <tr><td>34</td><td class="red">红14</td><td>17500</td><td>875</td><td>380</td></tr>
-                    <tr><td>35</td><td class="red">红15</td><td>18000</td><td>900</td><td>390</td></tr>
-                    <tr><td>36</td><td class="red">红16</td><td>18500</td><td>925</td><td>400</td></tr>
-                    <tr><td>37</td><td class="red">红17</td><td>19000</td><td>950</td><td>410</td></tr>
-                    <tr><td>38</td><td class="red">红18</td><td>19500</td><td>975</td><td>420</td></tr>
-                    <tr><td>39</td><td class="red">红19</td><td>20000</td><td>1000</td><td>430</td></tr>
-                    <tr><td>40</td><td class="red">红20</td><td>20500</td><td>1025</td><td>440</td></tr>
-                    <tr><td>41</td><td class="red">红21</td><td>21000</td><td>1050</td><td>450</td></tr>
-                    <tr><td>42</td><td class="red">红22</td><td>21500</td><td>1075</td><td>460</td></tr>
-                    <tr><td>43</td><td class="red">红23</td><td>22000</td><td>1100</td><td>470</td></tr>
-                    <tr><td>44</td><td class="red">红24</td><td>22500</td><td>1125</td><td>480</td></tr>
-                    <tr><td>45</td><td class="red">红25</td><td>23000</td><td>1150</td><td>490</td></tr>
-                    <tr><td>46</td><td class="red">红26</td><td>23500</td><td>1175</td><td>500</td></tr>
-                    <tr><td>47</td><td class="red">红27</td><td>24000</td><td>1200</td><td>510</td></tr>
-                    <tr><td>48</td><td class="red">红28</td><td>24500</td><td>1225</td><td>520</td></tr>
-                    <tr><td>49</td><td class="red">红29</td><td>25000</td><td>1250</td><td>530</td></tr>
-                    <tr><td>50</td><td class="red">红30</td><td>25500</td><td>1275</td><td>540</td></tr>
-                </tbody>
-            </table>
+        <!-- 结果区域：移除淡入动画类 -->
+        <div class="results-section" id="results-section">
+            <div class="result-summary">
+                <h3>计算结果</h3>
+                <div id="total-result">
+                    <p style="color: var(--text-secondary); text-align: center;">请点击"汇总计算"查看结果</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <script>
-        document.getElementById('input-panel-header').addEventListener('click', function() {
-            const content = document.getElementById('input-panel-content');
-            const icon = document.getElementById('panel-icon');
-            content.style.display = content.style.display === 'none' ? 'block' : 'none';
-            icon.textContent = content.style.display === 'none' ? '▲' : '▼';
-        });
+    <!-- 底部按钮组 -->
+    <div class="button-group">
+        <button id="calculate-all">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+            汇总计算
+        </button>
+    </div>
 
+    <script>
+        // 材料数据
         const levelMaterialData = {
             1: [1000, 50, 0], 2: [1500, 75, 0], 3: [2000, 100, 0], 4: [2500, 125, 0], 5: [3000, 150, 0],
             6: [3500, 175, 0], 7: [4000, 200, 0], 8: [4500, 225, 0], 9: [5000, 250, 0], 10: [5500, 275, 0],
@@ -418,6 +722,7 @@
             41: [21000, 1050, 450], 42: [21500, 1075, 460], 43: [22000, 1100, 470], 44: [22500, 1125, 480], 45: [23000, 1150, 490],
             46: [23500, 1175, 500], 47: [24000, 1200, 510], 48: [24500, 1225, 520], 49: [25000, 1250, 530], 50: [25500, 1275, 540]
         };
+        
         const levelNameMap = {
             1: "绿1", 2: "绿2", 3: "绿3", 4: "绿4", 5: "绿5",
             6: "蓝1", 7: "蓝2", 8: "蓝3", 9: "蓝4", 10: "蓝5",
@@ -431,200 +736,254 @@
             46: "红26", 47: "红27", 48: "红28", 49: "红29", 50: "红30"
         };
 
-        let charData = {
-            1: { saved: false }, 2: { saved: false }, 3: { saved: false }, 4: { saved: false },
-            5: { saved: false }, 6: { saved: false }
-        };
-        let currentChar = "1";
-
+        // 初始化页面
         document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.character-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.character-btn').forEach(b => {
-                        b.classList.remove('active');
-                        if (b.classList.contains('saved')) {
-                            b.classList.add('saved');
-                        }
-                    });
-                    btn.classList.add('active');
-                    currentChar = btn.dataset.char;
-                    loadCharData(currentChar);
+            for (let i = 1; i <= 6; i++) {
+                initLevelSelectors(i);
+            }
+
+            document.getElementById('calculate-all').addEventListener('click', calculateTotal);
+
+            // 绑定当前等级变化事件
+            document.querySelectorAll('.current-level-select').forEach(select => {
+                select.addEventListener('change', function() {
+                    const charId = this.id.split('-')[2];
+                    updateTargetLevelOptions(charId); // 重构：不展示不可选option
+                    updateStatusText(charId);
                 });
             });
 
-            document.getElementById('save-char').addEventListener('click', () => {
-                saveCurrentCharData();
-            });
-
-            document.getElementById('calculate-all').addEventListener('click', () => {
-                calculateTotal();
+            document.querySelectorAll('.target-level-select').forEach(select => {
+                select.addEventListener('change', function() {
+                    const charId = this.id.split('-')[2];
+                    updateStatusText(charId);
+                });
             });
         });
 
-        function saveCurrentCharData() {
-            const data = {
-                currentLevel: parseInt(document.getElementById('current-level').value),
-                targetLevel: parseInt(document.getElementById('target-level').value),
-                saved: true
-            };
-            charData[currentChar] = data;
+        // 初始化等级选择器
+        function initLevelSelectors(charId) {
+            const currentSelect = document.getElementById(`current-level-${charId}`);
+            const targetSelect = document.getElementById(`target-level-${charId}`);
             
-            // 更新按钮样式
-            const btn = document.querySelector(`.character-btn[data-char="${currentChar}"]`);
-            btn.classList.add('saved');
-            btn.classList.remove('active');
+            // 清空现有选项
+            currentSelect.innerHTML = '';
+            targetSelect.innerHTML = '';
             
-            alert(`神兵${currentChar}数据已保存！`);
-        }
-
-        function loadCharData(charId) {
-            const data = charData[charId];
-            if (data.saved) {
-                document.getElementById('current-level').value = data.currentLevel;
-                document.getElementById('target-level').value = data.targetLevel;
+            // 添加空选项
+            const emptyOption = document.createElement('option');
+            emptyOption.value = '';
+            emptyOption.textContent = '请选择';
+            currentSelect.appendChild(emptyOption.cloneNode(true));
+            targetSelect.appendChild(emptyOption);
+            
+            // 添加等级选项
+            for (let level = 1; level <= 50; level++) {
+                const option = document.createElement('option');
+                option.value = level;
+                option.textContent = `${level}-${levelNameMap[level]}`;
+                currentSelect.appendChild(option.cloneNode(true));
+                targetSelect.appendChild(option);
             }
+            
+            // 初始状态
+            currentSelect.value = '';
+            targetSelect.value = '';
+            targetSelect.disabled = true;
+            updateStatusText(charId);
         }
 
-        function calculateTotal() {
-            const allSaved = Object.values(charData).every(c => c.saved);
-            if (!allSaved) {
-                document.getElementById('total-result').innerHTML = '<p style="color:#f5222d;"><strong>汇总结果：</strong>请先保存6个神兵的数据！</p>';
+        // 重构：目标等级仅展示可选选项（不可选的直接不渲染，而非隐藏）
+        function updateTargetLevelOptions(charId) {
+            const currentSelect = document.getElementById(`current-level-${charId}`);
+            const targetSelect = document.getElementById(`target-level-${charId}`);
+            const currentLevel = parseInt(currentSelect.value);
+            
+            // 无当前等级：禁用并重置目标选择器
+            if (!currentLevel) {
+                targetSelect.disabled = true;
+                targetSelect.innerHTML = '';
+                const emptyOption = document.createElement('option');
+                emptyOption.value = '';
+                emptyOption.textContent = '请选择';
+                targetSelect.appendChild(emptyOption);
+                targetSelect.value = '';
                 return;
             }
-
-            // 计算所有神兵的总材料需求（累计所有等级）
-            let totalZitan = 0, totalJingjin = 0, totalQingjin = 0;
             
-            for (let charId = 1; charId <= 6; charId++) {
-                const data = charData[charId];
-                if (data.targetLevel < data.currentLevel) {
-                    document.getElementById('total-result').innerHTML = `<p style="color:#f5222d;">错误：神兵${charId}的目标等级必须大于当前等级</p>`;
-                    return;
-                }
-
-                // 累计计算该神兵所有等级的材料需求
-                for (let l = data.currentLevel + 1; l <= data.targetLevel; l++) {
-                    totalZitan += levelMaterialData[l][0];
-                    totalJingjin += levelMaterialData[l][1];
-                    totalQingjin += levelMaterialData[l][2];
-                }
+            // 有当前等级：重新生成仅包含可选选项的目标列表（≥当前等级）
+            targetSelect.disabled = false;
+            targetSelect.innerHTML = ''; // 清空所有旧选项
+            
+            // 第一步：添加空选项
+            const emptyOption = document.createElement('option');
+            emptyOption.value = '';
+            emptyOption.textContent = '请选择';
+            targetSelect.appendChild(emptyOption);
+            
+            // 第二步：仅添加 ≥ 当前等级的选项（不可选的直接不生成，彻底不展示）
+            for (let level = currentLevel; level <= 50; level++) {
+                const option = document.createElement('option');
+                option.value = level;
+                option.textContent = `${level}-${levelNameMap[level]}`;
+                targetSelect.appendChild(option);
             }
+            
+            // 默认选中当前等级（提升用户体验）
+            targetSelect.value = currentLevel;
+        }
 
-            // 读取全局拥有的材料
+        // 更新状态文本
+        function updateStatusText(charId) {
+            const statusText = document.getElementById(`status-text-${charId}`);
+            const currentSelect = document.getElementById(`current-level-${charId}`);
+            const targetSelect = document.getElementById(`target-level-${charId}`);
+            const currentLevel = parseInt(currentSelect.value);
+            const targetLevel = parseInt(targetSelect.value);
+            const statusDot = document.getElementById(`char-status-${charId}`).querySelector('.status-dot');
+            
+            if (!currentLevel) {
+                statusText.textContent = "请先选择当前等级";
+                statusDot.style.backgroundColor = "var(--warning-color)";
+            } else {
+                statusText.textContent = `${levelNameMap[currentLevel]} → ${levelNameMap[targetLevel]}`;
+                statusDot.style.backgroundColor = "var(--secondary-color)";
+            }
+        }
+
+        // 计算总需求
+        function calculateTotal() {
+            // 读取全局材料拥有量
             const ownedZitan = parseInt(document.getElementById('global-owned-zitan').value) || 0;
             const ownedJingjin = parseInt(document.getElementById('global-owned-jingjin').value) || 0;
             const ownedQingjin = parseInt(document.getElementById('global-owned-qingjin').value) || 0;
+            
+            // 读取礼包配置
+            const zitanPerPackage = parseInt(document.getElementById('zitan-package').value) || 12;
+            const zitanPrice = parseInt(document.getElementById('zitan-pkg-price').value) || 11;
+            const jingjinPerPackage = parseInt(document.getElementById('jingjin-package').value) || 1;
+            const jingjinPrice = parseInt(document.getElementById('jingjin-pkg-price').value) || 18;
+            const qingjinPerPackage = parseInt(document.getElementById('qingjin-package').value) || 1;
+            const qingjinPrice = parseInt(document.getElementById('qingjin-pkg-price').value) || 55;
+            
+            // 读取活动币
+            const totalCoin = parseInt(document.getElementById('total-activity-coin').value) || 0;
 
-            // 计算材料缺口
-            const gapZitan = Math.max(0, totalZitan - ownedZitan);
-            const gapJingjin = Math.max(0, totalJingjin - ownedJingjin);
-            const gapQingjin = Math.max(0, totalQingjin - ownedQingjin);
+            // 计算所有神兵的总材料需求
+            let totalZitanNeed = 0, totalJingjinNeed = 0, totalQingjinNeed = 0;
+            let charDetails = [];
 
-            // 读取礼包设置
-            const zitanPkgPrice = parseInt(document.getElementById('zitan-pkg-price').value) || 350;
-            const jingjinPkgPrice = parseInt(document.getElementById('jingjin-pkg-price').value) || 350;
-            const qingjinPkgPrice = parseInt(document.getElementById('qingjin-pkg-price').value) || 350;
-            const zitanPackage = parseInt(document.getElementById('zitan-package').value) || 1200;
-            const jingjinPackage = parseInt(document.getElementById('jingjin-package').value) || 60;
-            const qingjinPackage = parseInt(document.getElementById('qingjin-package').value) || 20;
+            for (let charId = 1; charId <= 6; charId++) {
+                const currentLevel = parseInt(document.getElementById(`current-level-${charId}`).value);
+                const targetLevel = parseInt(document.getElementById(`target-level-${charId}`).value);
+                
+                // 跳过未选择等级的角色
+                if (!currentLevel || !targetLevel || currentLevel >= targetLevel) continue;
 
-            // 计算需要购买的礼包数量
-            const needZitanPkg = gapZitan === 0 ? 0 : Math.ceil(gapZitan / zitanPackage);
-            const needJingjinPkg = gapJingjin === 0 ? 0 : Math.ceil(gapJingjin / jingjinPackage);
-            const needQingjinPkg = gapQingjin === 0 ? 0 : Math.ceil(gapQingjin / qingjinPackage);
+                // 计算单个角色的材料需求
+                let charZitan = 0, charJingjin = 0, charQingjin = 0;
+                for (let level = currentLevel + 1; level <= targetLevel; level++) {
+                    const [zitan, jingjin, qingjin] = levelMaterialData[level] || [0, 0, 0];
+                    charZitan += zitan;
+                    charJingjin += jingjin;
+                    charQingjin += qingjin;
+                }
 
-            // 计算总活动币消耗
-            const totalCoinNeed = (needZitanPkg * zitanPkgPrice) + 
-                                 (needJingjinPkg * jingjinPkgPrice) + 
-                                 (needQingjinPkg * qingjinPkgPrice);
+                // 累加总需求
+                totalZitanNeed += charZitan;
+                totalJingjinNeed += charJingjin;
+                totalQingjinNeed += charQingjin;
 
-            const totalActivityCoin = parseInt(document.getElementById('total-activity-coin').value) || 0;
-            const isEnough = totalCoinNeed <= totalActivityCoin;
-            const coinGap = isEnough ? 0 : totalCoinNeed - totalActivityCoin;
-			
-			// 生成各个神兵的等级信息（按步、弓、骑分3行展示）
-			let charLevelsHtml = '';
-			let buChars = [], gongChars = [], qiChars = [];
+                // 记录单个角色详情
+                charDetails.push({
+                    id: charId,
+                    name: getCharName(charId),
+                    currentLevel: currentLevel,
+                    targetLevel: targetLevel,
+                    zitan: charZitan,
+                    jingjin: charJingjin,
+                    qingjin: charQingjin
+                });
+            }
 
-			// 按兵种分类神兵
-			for (let charId = 1; charId <= 6; charId++) {
-				const data = charData[charId];
-				const charName = document.querySelector(`.character-btn[data-char="${charId}"]`).textContent;
-				const charInfo = {
-					name: charName,
-					currentLevel: data.currentLevel,
-					targetLevel: data.targetLevel,
-					currentLevelName: levelNameMap[data.currentLevel],
-					targetLevelName: levelNameMap[data.targetLevel]
-				};
-				
-				// 根据神兵ID判断兵种（假设1-2为步，3-4为弓，5-6为骑）
-				if (charId <= 2) {
-					buChars.push(charInfo);
-				} else if (charId <= 4) {
-					gongChars.push(charInfo);
-				} else {
-					qiChars.push(charInfo);
-				}
-			}
+            // 计算缺口
+            const zitanShortage = Math.max(0, totalZitanNeed - ownedZitan);
+            const jingjinShortage = Math.max(0, totalJingjinNeed - ownedJingjin);
+            const qingjinShortage = Math.max(0, totalQingjinNeed - ownedQingjin);
 
-			// 生成步兵行
-			charLevelsHtml += `<div style="margin-bottom: 8px;"><strong>步：</strong>`;
-			buChars.forEach((char, index) => {
-				charLevelsHtml += `${char.name}: ${char.currentLevelName} → ${char.targetLevelName}`;
-				if (index < buChars.length - 1) {
-					charLevelsHtml += ' | ';
-				}
-			});
-			charLevelsHtml += '</div>';
+            // 计算需要购买的礼包数和花费
+            const zitanPackages = Math.ceil(zitanShortage / zitanPerPackage);
+            const zitanCost = zitanPackages * zitanPrice;
+            const jingjinPackages = Math.ceil(jingjinShortage / jingjinPerPackage);
+            const jingjinCost = jingjinPackages * jingjinPrice;
+            const qingjinPackages = Math.ceil(qingjinShortage / qingjinPerPackage);
+            const qingjinCost = qingjinPackages * qingjinPrice;
 
-			// 生成弓兵行
-			charLevelsHtml += `<div style="margin-bottom: 8px;"><strong>弓：</strong>`;
-			gongChars.forEach((char, index) => {
-				charLevelsHtml += `${char.name}: ${char.currentLevelName} → ${char.targetLevelName}`;
-				if (index < gongChars.length - 1) {
-					charLevelsHtml += ' | ';
-				}
-			});
-			charLevelsHtml += '</div>';
+            const totalCost = zitanCost + jingjinCost + qingjinCost;
+            const coinSurplus = totalCoin - totalCost;
 
-			// 生成骑兵行
-			charLevelsHtml += `<div style="margin-bottom: 8px;"><strong>骑：</strong>`;
-			qiChars.forEach((char, index) => {
-				charLevelsHtml += `${char.name}: ${char.currentLevelName} → ${char.targetLevelName}`;
-				if (index < qiChars.length - 1) {
-					charLevelsHtml += ' | ';
-				}
-			});
-			charLevelsHtml += '</div>';
-
-            const totalHtml = `
-                <p><strong>6神兵汇总结果：</strong></p>
-				<div style="margin-bottom: 10px;">
-					<p><strong>各神兵升级规划：</strong></p>
-					${charLevelsHtml}
-				</div>
-                <p><strong>1. 总材料需求：</strong>
-                  紫檀木<span class="need-more">${totalZitan}</span> | 
-                  精金<span class="need-more">${totalJingjin}</span> | 
-                  青金石<span class="need-more">${totalQingjin}</span>
-                </p>
-                <p><strong>2. 总材料缺口：</strong>
-                  紫檀木<span class="need-more">${gapZitan}</span> | 
-                  精金<span class="need-more">${gapJingjin}</span> | 
-                  青金石<span class="need-more">${gapQingjin}</span>
-                </p>
-                <p><strong>3. 总所需礼包：</strong>
-                  紫檀木<span class="package-count">${needZitanPkg}</span>份 | 
-                  精金<span class="package-count">${needJingjinPkg}</span>份 | 
-                  青金石<span class="package-count">${needQingjinPkg}</span>份
-                </p>
-                <p><strong>4. 活动币判断：</strong>
-                  总拥有${totalActivityCoin}币 | 总消耗${totalCoinNeed}币 | 
-                  状态<span class="${isEnough?'enough':'need-more'}">${isEnough?'足够':'差'+coinGap+'币'}</span>
-                </p>
+            // 生成结果HTML
+            let resultHTML = `
+                <div class="result-item">
+                    <h4>总材料需求</h4>
+                    <div class="result-content">
+                        <p>紫檀木：${formatNumber(totalZitanNeed)}（已拥有：${formatNumber(ownedZitan)}，缺口：${formatNumber(zitanShortage)}）
+                            ${zitanShortage > 0 ? `<span class="result-badge badge-need">需购${zitanPackages}个礼包</span>` : `<span class="result-badge badge-enough">足够</span>`}
+                        </p>
+                        <p>精金：${formatNumber(totalJingjinNeed)}（已拥有：${formatNumber(ownedJingjin)}，缺口：${formatNumber(jingjinShortage)}）
+                            ${jingjinShortage > 0 ? `<span class="result-badge badge-need">需购${jingjinPackages}个礼包</span>` : `<span class="result-badge badge-enough">足够</span>`}
+                        </p>
+                        <p>青金石：${formatNumber(totalQingjinNeed)}（已拥有：${formatNumber(ownedQingjin)}，缺口：${formatNumber(qingjinShortage)}）
+                            ${qingjinShortage > 0 ? `<span class="result-badge badge-need">需购${qingjinPackages}个礼包</span>` : `<span class="result-badge badge-enough">足够</span>`}
+                        </p>
+                    </div>
+                </div>
+                <div class="result-item">
+                    <h4>礼包花费</h4>
+                    <div class="result-content">
+                        <p>紫檀木礼包：${zitanPackages}个 × ${zitanPrice} = ${formatNumber(zitanCost)} 活动币</p>
+                        <p>精金礼包：${jingjinPackages}个 × ${jingjinPrice} = ${formatNumber(jingjinCost)} 活动币</p>
+                        <p>青金石礼包：${qingjinPackages}个 × ${qingjinPrice} = ${formatNumber(qingjinCost)} 活动币</p>
+                        <p><strong>总计：${formatNumber(totalCost)} 活动币</strong></p>
+                        <p>可用活动币：${formatNumber(totalCoin)} → 剩余：${formatNumber(coinSurplus)} ${coinSurplus < 0 ? '<span class="result-badge badge-need">不足</span>' : '<span class="result-badge badge-enough">足够</span>'}</p>
+                    </div>
+                </div>
             `;
-            document.getElementById('total-result').innerHTML = totalHtml;
+
+            // 添加单个角色详情
+            if (charDetails.length > 0) {
+                resultHTML += `
+                    <div class="result-item">
+                        <h4>各角色材料需求</h4>
+                        <div class="result-content">
+                `;
+                charDetails.forEach(char => {
+                    resultHTML += `
+                        <p><strong>${char.name}</strong>（${levelNameMap[char.currentLevel]} → ${levelNameMap[char.targetLevel]}）：
+                        紫檀木${formatNumber(char.zitan)}、精金${formatNumber(char.jingjin)}、青金石${formatNumber(char.qingjin)}</p>
+                    `;
+                });
+                resultHTML += `
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 显示结果
+            document.getElementById('total-result').innerHTML = resultHTML;
+        }
+
+        // 辅助函数：获取角色名称
+        function getCharName(charId) {
+            const nameMap = {
+                1: '步1', 2: '步2', 3: '骑1', 4: '骑2', 5: '弓1', 6: '弓2'
+            };
+            return nameMap[charId] || `角色${charId}`;
+        }
+
+        // 辅助函数：格式化数字（千分位）
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
     </script>
 </body>
