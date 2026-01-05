@@ -971,6 +971,13 @@
 
             // 显示结果
             document.getElementById('total-result').innerHTML = resultHTML;
+
+            // 【新增核心代码：滚动到页面最底部】
+			window.scrollTo({
+				top: document.body.scrollHeight,
+				left: 0,
+				behavior: 'auto' // 无平滑动画，符合减少额外动画的需求
+			});
         }
 
         // 辅助函数：获取角色名称
