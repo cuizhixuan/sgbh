@@ -448,482 +448,522 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- 顶部标题栏 -->
-        <div class="header">
-            <h1>阶位材料升级计算器</h1>
-            <div class="subtitle">风采 · 神兵进阶规划</div>
-        </div>
+<div class="container">
+    <!-- 顶部标题栏 -->
+    <div class="header">
+        <h1>阶位材料升级计算器</h1>
+        <div class="subtitle">风采 · 神兵进阶规划</div>
+    </div>
 
-        <!-- 神兵输入区域 -->
-        <div class="characters-container">
-            <!-- 步兵组 -->
-            <div class="class-group-card">
-                <div class="class-group-header infantry">
-                    <h2>步兵</h2>
+    <!-- 神兵输入区域 -->
+    <div class="characters-container">
+        <!-- 步兵组 -->
+        <div class="class-group-card">
+            <div class="class-group-header infantry">
+                <h2>步兵</h2>
+            </div>
+
+            <!-- 步兵1 -->
+            <div class="character-row">
+                <div class="character-row-header">
+                    <div class="character-name">步1</div>
                 </div>
-                
-                <!-- 步兵1 -->
-                <div class="character-row">
-                    <div class="character-row-header">
-                        <div class="character-name">步1</div>
-                    </div>
-                    <div class="level-selectors">
-                        <div class="level-selector">
-                            <label for="current-level-1">当前等级</label>
-                            <div class="select-wrapper">
-                                <select id="current-level-1" class="current-level-select"></select>
-                            </div>
-                        </div>
-                        <div class="level-selector">
-                            <label for="target-level-1">目标等级</label>
-                            <div class="select-wrapper">
-                                <select id="target-level-1" class="target-level-select" disabled></select>
-                            </div>
+                <div class="level-selectors">
+                    <div class="level-selector">
+                        <label for="current-level-1">当前等级</label>
+                        <div class="select-wrapper">
+                            <select id="current-level-1" class="current-level-select"></select>
                         </div>
                     </div>
-                    <div class="char-status" id="char-status-1">
-                        <div class="status-dot"></div>
-                        <span id="status-text-1">请先选择当前等级</span>
+                    <div class="level-selector">
+                        <label for="target-level-1">目标等级</label>
+                        <div class="select-wrapper">
+                            <select id="target-level-1" class="target-level-select" disabled></select>
+                        </div>
                     </div>
                 </div>
-                
-                <!-- 步兵2 -->
-                <div class="character-row">
-                    <div class="character-row-header">
-                        <div class="character-name">步2</div>
-                    </div>
-                    <div class="level-selectors">
-                        <div class="level-selector">
-                            <label for="current-level-2">当前等级</label>
-                            <div class="select-wrapper">
-                                <select id="current-level-2" class="current-level-select"></select>
-                            </div>
-                        </div>
-                        <div class="level-selector">
-                            <label for="target-level-2">目标等级</label>
-                            <div class="select-wrapper">
-                                <select id="target-level-2" class="target-level-select" disabled></select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="char-status" id="char-status-2">
-                        <div class="status-dot"></div>
-                        <span id="status-text-2">请先选择当前等级</span>
-                    </div>
+                <div class="char-status" id="char-status-1">
+                    <div class="status-dot"></div>
+                    <span id="status-text-1">请先选择当前等级</span>
                 </div>
             </div>
-            
-            <!-- 骑兵组 -->
-            <div class="class-group-card">
-                <div class="class-group-header cavalry">
-                    <h2>骑兵</h2>
+
+            <!-- 步兵2 -->
+            <div class="character-row">
+                <div class="character-row-header">
+                    <div class="character-name">步2</div>
                 </div>
-                
-                <!-- 骑兵1 -->
-                <div class="character-row">
-                    <div class="character-row-header">
-                        <div class="character-name">骑1</div>
-                    </div>
-                    <div class="level-selectors">
-                        <div class="level-selector">
-                            <label for="current-level-3">当前等级</label>
-                            <div class="select-wrapper">
-                                <select id="current-level-3" class="current-level-select"></select>
-                            </div>
-                        </div>
-                        <div class="level-selector">
-                            <label for="target-level-3">目标等级</label>
-                            <div class="select-wrapper">
-                                <select id="target-level-3" class="target-level-select" disabled></select>
-                            </div>
+                <div class="level-selectors">
+                    <div class="level-selector">
+                        <label for="current-level-2">当前等级</label>
+                        <div class="select-wrapper">
+                            <select id="current-level-2" class="current-level-select"></select>
                         </div>
                     </div>
-                    <div class="char-status" id="char-status-3">
-                        <div class="status-dot"></div>
-                        <span id="status-text-3">请先选择当前等级</span>
+                    <div class="level-selector">
+                        <label for="target-level-2">目标等级</label>
+                        <div class="select-wrapper">
+                            <select id="target-level-2" class="target-level-select" disabled></select>
+                        </div>
                     </div>
                 </div>
-                
-                <!-- 骑兵2 -->
-                <div class="character-row">
-                    <div class="character-row-header">
-                        <div class="character-name">骑2</div>
-                    </div>
-                    <div class="level-selectors">
-                        <div class="level-selector">
-                            <label for="current-level-4">当前等级</label>
-                            <div class="select-wrapper">
-                                <select id="current-level-4" class="current-level-select"></select>
-                            </div>
-                        </div>
-                        <div class="level-selector">
-                            <label for="target-level-4">目标等级</label>
-                            <div class="select-wrapper">
-                                <select id="target-level-4" class="target-level-select" disabled></select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="char-status" id="char-status-4">
-                        <div class="status-dot"></div>
-                        <span id="status-text-4">请先选择当前等级</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 弓兵组 -->
-            <div class="class-group-card">
-                <div class="class-group-header archer">
-                    <h2>弓兵</h2>
-                </div>
-                
-                <!-- 弓兵1 -->
-                <div class="character-row">
-                    <div class="character-row-header">
-                        <div class="character-name">弓1</div>
-                    </div>
-                    <div class="level-selectors">
-                        <div class="level-selector">
-                            <label for="current-level-5">当前等级</label>
-                            <div class="select-wrapper">
-                                <select id="current-level-5" class="current-level-select"></select>
-                            </div>
-                        </div>
-                        <div class="level-selector">
-                            <label for="target-level-5">目标等级</label>
-                            <div class="select-wrapper">
-                                <select id="target-level-5" class="target-level-select" disabled></select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="char-status" id="char-status-5">
-                        <div class="status-dot"></div>
-                        <span id="status-text-5">请先选择当前等级</span>
-                    </div>
-                </div>
-                
-                <!-- 弓兵2 -->
-                <div class="character-row">
-                    <div class="character-row-header">
-                        <div class="character-name">弓2</div>
-                    </div>
-                    <div class="level-selectors">
-                        <div class="level-selector">
-                            <label for="current-level-6">当前等级</label>
-                            <div class="select-wrapper">
-                                <select id="current-level-6" class="current-level-select"></select>
-                            </div>
-                        </div>
-                        <div class="level-selector">
-                            <label for="target-level-6">目标等级</label>
-                            <div class="select-wrapper">
-                                <select id="target-level-6" class="target-level-select" disabled></select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="char-status" id="char-status-6">
-                        <div class="status-dot"></div>
-                        <span id="status-text-6">请先选择当前等级</span>
-                    </div>
+                <div class="char-status" id="char-status-2">
+                    <div class="status-dot"></div>
+                    <span id="status-text-2">请先选择当前等级</span>
                 </div>
             </div>
         </div>
 
-        <!-- 材料输入区域 -->
-        <div class="materials-input">
-            <h3>全局材料设置</h3>
+        <!-- 骑兵组 -->
+        <div class="class-group-card">
+            <div class="class-group-header cavalry">
+                <h2>骑兵</h2>
+            </div>
+
+            <!-- 骑兵1 -->
+            <div class="character-row">
+                <div class="character-row-header">
+                    <div class="character-name">骑1</div>
+                </div>
+                <div class="level-selectors">
+                    <div class="level-selector">
+                        <label for="current-level-3">当前等级</label>
+                        <div class="select-wrapper">
+                            <select id="current-level-3" class="current-level-select"></select>
+                        </div>
+                    </div>
+                    <div class="level-selector">
+                        <label for="target-level-3">目标等级</label>
+                        <div class="select-wrapper">
+                            <select id="target-level-3" class="target-level-select" disabled></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="char-status" id="char-status-3">
+                    <div class="status-dot"></div>
+                    <span id="status-text-3">请先选择当前等级</span>
+                </div>
+            </div>
+
+            <!-- 骑兵2 -->
+            <div class="character-row">
+                <div class="character-row-header">
+                    <div class="character-name">骑2</div>
+                </div>
+                <div class="level-selectors">
+                    <div class="level-selector">
+                        <label for="current-level-4">当前等级</label>
+                        <div class="select-wrapper">
+                            <select id="current-level-4" class="current-level-select"></select>
+                        </div>
+                    </div>
+                    <div class="level-selector">
+                        <label for="target-level-4">目标等级</label>
+                        <div class="select-wrapper">
+                            <select id="target-level-4" class="target-level-select" disabled></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="char-status" id="char-status-4">
+                    <div class="status-dot"></div>
+                    <span id="status-text-4">请先选择当前等级</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 弓兵组 -->
+        <div class="class-group-card">
+            <div class="class-group-header archer">
+                <h2>弓兵</h2>
+            </div>
+
+            <!-- 弓兵1 -->
+            <div class="character-row">
+                <div class="character-row-header">
+                    <div class="character-name">弓1</div>
+                </div>
+                <div class="level-selectors">
+                    <div class="level-selector">
+                        <label for="current-level-5">当前等级</label>
+                        <div class="select-wrapper">
+                            <select id="current-level-5" class="current-level-select"></select>
+                        </div>
+                    </div>
+                    <div class="level-selector">
+                        <label for="target-level-5">目标等级</label>
+                        <div class="select-wrapper">
+                            <select id="target-level-5" class="target-level-select" disabled></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="char-status" id="char-status-5">
+                    <div class="status-dot"></div>
+                    <span id="status-text-5">请先选择当前等级</span>
+                </div>
+            </div>
+
+            <!-- 弓兵2 -->
+            <div class="character-row">
+                <div class="character-row-header">
+                    <div class="character-name">弓2</div>
+                </div>
+                <div class="level-selectors">
+                    <div class="level-selector">
+                        <label for="current-level-6">当前等级</label>
+                        <div class="select-wrapper">
+                            <select id="current-level-6" class="current-level-select"></select>
+                        </div>
+                    </div>
+                    <div class="level-selector">
+                        <label for="target-level-6">目标等级</label>
+                        <div class="select-wrapper">
+                            <select id="target-level-6" class="target-level-select" disabled></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="char-status" id="char-status-6">
+                    <div class="status-dot"></div>
+                    <span id="status-text-6">请先选择当前等级</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 材料输入区域 -->
+    <div class="materials-input">
+        <h3>全局材料设置</h3>
+        <div class="materials-grid">
+            <div class="material-item">
+                <label for="global-owned-zitan">已拥有紫檀木</label>
+                <input type="number" id="global-owned-zitan" min="0" value="0">
+            </div>
+            <div class="material-item">
+                <label for="global-owned-jingjin">已拥有精金</label>
+                <input type="number" id="global-owned-jingjin" min="0" value="0">
+            </div>
+            <div class="material-item">
+                <label for="global-owned-qingjin">已拥有青金石</label>
+                <input type="number" id="global-owned-qingjin" min="0" value="0">
+            </div>
+        </div>
+
+        <div class="package-settings">
+            <h4>礼包设置</h4>
             <div class="materials-grid">
                 <div class="material-item">
-                    <label for="global-owned-zitan">已拥有紫檀木</label>
-                    <input type="number" id="global-owned-zitan" min="0" value="0">
+                    <label for="zitan-package">紫檀木礼包</label>
+                    <input type="number" id="zitan-package" min="1" value="10">
                 </div>
                 <div class="material-item">
-                    <label for="global-owned-jingjin">已拥有精金</label>
-                    <input type="number" id="global-owned-jingjin" min="0" value="0">
+                    <label for="zitan-pkg-price">礼包价格</label>
+                    <input type="number" id="zitan-pkg-price" min="1" value="1">
+                </div>
+            </div>
+            <div class="materials-grid">
+                <div class="material-item">
+                    <label for="jingjin-package">精金礼包</label>
+                    <input type="number" id="jingjin-package" min="1" value="1">
                 </div>
                 <div class="material-item">
-                    <label for="global-owned-qingjin">已拥有青金石</label>
-                    <input type="number" id="global-owned-qingjin" min="0" value="0">
+                    <label for="jingjin-pkg-price">礼包价格</label>
+                    <input type="number" id="jingjin-pkg-price" min="1" value="2">
                 </div>
             </div>
-            
-            <div class="package-settings">
-                <h4>礼包设置</h4>
-                <div class="materials-grid">
-                    <div class="material-item">
-                        <label for="zitan-package">紫檀木礼包</label>
-                        <input type="number" id="zitan-package" min="1" value="10">
-                    </div>
-                    <div class="material-item">
-                        <label for="zitan-pkg-price">礼包价格</label>
-                        <input type="number" id="zitan-pkg-price" min="1" value="1">
-                    </div>
+            <div class="materials-grid">
+                <div class="material-item">
+                    <label for="qingjin-package">青金石礼包</label>
+                    <input type="number" id="qingjin-package" min="1" value="1">
                 </div>
-                <div class="materials-grid">
-                    <div class="material-item">
-                        <label for="jingjin-package">精金礼包</label>
-                        <input type="number" id="jingjin-package" min="1" value="1">
-                    </div>
-                    <div class="material-item">
-                        <label for="jingjin-pkg-price">礼包价格</label>
-                        <input type="number" id="jingjin-pkg-price" min="1" value="2">
-                    </div>
+                <div class="material-item">
+                    <label for="qingjin-pkg-price">礼包价格</label>
+                    <input type="number" id="qingjin-pkg-price" min="1" value="6">
                 </div>
-                <div class="materials-grid">
-                    <div class="material-item">
-                        <label for="qingjin-package">青金石礼包</label>
-                        <input type="number" id="qingjin-package" min="1" value="1">
-                    </div>
-                    <div class="material-item">
-                        <label for="qingjin-pkg-price">礼包价格</label>
-                        <input type="number" id="qingjin-pkg-price" min="1" value="6">
-                    </div>
-                </div>
-            </div>
-            
-            <div style="margin-top: 16px;">
-                <label for="total-activity-coin" style="display: block; font-weight: 600; margin-bottom: 8px;">可用活动币</label>
-                <input type="number" id="total-activity-coin" min="0" value="0" style="width: 100%; padding: 12px; font-size: 16px;">
             </div>
         </div>
 
-        <!-- 结果区域：移除淡入动画类 -->
-        <div class="results-section" id="results-section">
-            <div class="result-summary">
-                <h3>计算结果</h3>
-                <div id="total-result">
-                    <p style="color: var(--text-secondary); text-align: center;">请点击"汇总计算"查看结果</p>
-                </div>
-            </div>
+        <div style="margin-top: 16px;">
+            <label for="total-activity-coin" style="display: block; font-weight: 600; margin-bottom: 8px;">可用活动币</label>
+            <input type="number" id="total-activity-coin" min="0" value="0" style="width: 100%; padding: 12px; font-size: 16px;">
         </div>
     </div>
 
-    <!-- 底部按钮组 -->
-    <div class="button-group">
-        <button id="calculate-all">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-            </svg>
-            汇总计算
-        </button>
+    <!-- 结果区域：移除淡入动画类 -->
+    <div class="results-section" id="results-section">
+        <div class="result-summary">
+            <h3>计算结果</h3>
+            <div id="total-result">
+                <p style="color: var(--text-secondary); text-align: center;">请点击"汇总计算"查看结果</p>
+            </div>
+        </div>
     </div>
+</div>
 
-    <script>
-        // 材料数据
-        const levelMaterialData = {
-            1: [1000, 50, 0], 2: [1500, 75, 0], 3: [2000, 100, 0], 4: [2500, 125, 0], 5: [3000, 150, 0],
-            6: [3500, 175, 0], 7: [4000, 200, 0], 8: [4500, 225, 0], 9: [5000, 250, 0], 10: [5500, 275, 0],
-            11: [6000, 300, 150], 12: [6500, 325, 160], 13: [7000, 350, 170], 14: [7500, 375, 180], 15: [8000, 400, 190],
-            16: [8500, 425, 200], 17: [9000, 450, 210], 18: [9500, 475, 220], 19: [10000, 500, 230], 20: [10500, 525, 240],
-            21: [11000, 550, 250], 22: [11500, 575, 260], 23: [12000, 600, 270], 24: [12500, 625, 280], 25: [13000, 650, 290],
-            26: [13500, 675, 300], 27: [14000, 700, 310], 28: [14500, 725, 320], 29: [15000, 750, 330], 30: [15500, 775, 340],
-            31: [16000, 800, 350], 32: [16500, 825, 360], 33: [17000, 850, 370], 34: [17500, 875, 380], 35: [18000, 900, 390],
-            36: [18500, 925, 400], 37: [19000, 950, 410], 38: [19500, 975, 420], 39: [20000, 1000, 430], 40: [20500, 1025, 440],
-            41: [21000, 1050, 450], 42: [21500, 1075, 460], 43: [22000, 1100, 470], 44: [22500, 1125, 480], 45: [23000, 1150, 490],
-            46: [23500, 1175, 500], 47: [24000, 1200, 510], 48: [24500, 1225, 520], 49: [25000, 1250, 530], 50: [25500, 1275, 540]
-        };
-        
-        const levelNameMap = {
-            1: "绿1", 2: "绿2", 3: "绿3", 4: "绿4", 5: "绿5",
-            6: "蓝1", 7: "蓝2", 8: "蓝3", 9: "蓝4", 10: "蓝5",
-            11: "紫1", 12: "紫2", 13: "紫3", 14: "紫4", 15: "紫5",
-            16: "紫6", 17: "紫7", 18: "紫8", 19: "紫9", 20: "紫10",
-            21: "红1", 22: "红2", 23: "红3", 24: "红4", 25: "红5",
-            26: "红6", 27: "红7", 28: "红8", 29: "红9", 30: "红10",
-            31: "红11", 32: "红12", 33: "红13", 34: "红14", 35: "红15",
-            36: "红16", 37: "红17", 38: "红18", 39: "红19", 40: "红20",
-            41: "红21", 42: "红22", 43: "红23", 44: "红24", 45: "红25",
-            46: "红26", 47: "红27", 48: "红28", 49: "红29", 50: "红30"
-        };
+<!-- 底部按钮组 -->
+<div class="button-group">
+    <button id="calculate-all">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+        </svg>
+        汇总计算
+    </button>
+</div>
 
-        // 初始化页面
-        document.addEventListener('DOMContentLoaded', () => {
-            for (let i = 1; i <= 6; i++) {
-                initLevelSelectors(i);
-            }
+<script>
+    // 材料数据
+    const levelMaterialData = {
+        1: [1000, 50, 0],
+        2: [1500, 75, 0],
+        3: [2000, 100, 0],
+        4: [2500, 125, 0],
+        5: [3000, 150, 0],
+        6: [3500, 175, 0],
+        7: [4000, 200, 0],
+        8: [4500, 225, 0],
+        9: [5000, 250, 0],
+        10: [5500, 275, 0],
+        11: [6000, 300, 150],
+        12: [6500, 325, 160],
+        13: [7000, 350, 170],
+        14: [7500, 375, 180],
+        15: [8000, 400, 180],
+        16: [8500, 425, 190],
+        17: [9000, 450, 200],
+        18: [9500, 475, 200],
+        19: [10000, 500, 210],
+        20: [10500, 525, 220],
+        21: [11000, 550, 220],
+        22: [12000, 600, 230],
+        23: [13000, 650, 250],
+        24: [14000, 700, 260],
+        25: [15000, 750, 270],
+        26: [16000, 800, 280],
+        27: [17000, 850, 290],
+        28: [18000, 900, 300],
+        29: [19000, 950, 300],
+        30: [20000, 1000, 310],
+        31: [21000, 1050, 320],
+        32: [22000, 1100, 320],
+        33: [23000, 1150, 320],
+        34: [24000, 1200, 320],
+        35: [25000, 1250, 330],
+        36: [26000, 1300, 330],
+        37: [27000, 1350, 340],
+        38: [28000, 1400, 350],
+        39: [29000, 1450, 360],
+        40: [30000, 1500, 360],
+        41: [31000, 1550, 360],
+        42: [32000, 1600, 370],
+        43: [33000, 1650, 380],
+        44: [34000, 1700, 390],
+        45: [35000, 1750, 390],
+        46: [36000, 1800, 400],
+        47: [37000, 1850, 410],
+        48: [38000, 1900, 420],
+        49: [39000, 1950, 430],
+        50: [40000, 2000, 440]
+    };
 
-            document.getElementById('calculate-all').addEventListener('click', calculateTotal);
+    const levelNameMap = {
+        1: "绿1", 2: "绿2", 3: "绿3", 4: "绿4", 5: "绿5",
+        6: "蓝1", 7: "蓝2", 8: "蓝3", 9: "蓝4", 10: "蓝5",
+        11: "紫1", 12: "紫2", 13: "紫3", 14: "紫4", 15: "紫5",
+        16: "紫6", 17: "紫7", 18: "紫8", 19: "紫9", 20: "紫10",
+        21: "红1", 22: "红2", 23: "红3", 24: "红4", 25: "红5",
+        26: "红6", 27: "红7", 28: "红8", 29: "红9", 30: "红10",
+        31: "红11", 32: "红12", 33: "红13", 34: "红14", 35: "红15",
+        36: "红16", 37: "红17", 38: "红18", 39: "红19", 40: "红20",
+        41: "红21", 42: "红22", 43: "红23", 44: "红24", 45: "红25",
+        46: "红26", 47: "红27", 48: "红28", 49: "红29", 50: "红30"
+    };
 
-            // 绑定当前等级变化事件
-            document.querySelectorAll('.current-level-select').forEach(select => {
-                select.addEventListener('change', function() {
-                    const charId = this.id.split('-')[2];
-                    updateTargetLevelOptions(charId); // 重构：不展示不可选option
-                    updateStatusText(charId);
-                });
-            });
+    // 初始化页面
+    document.addEventListener('DOMContentLoaded', () => {
+        for (let i = 1; i <= 6; i++) {
+            initLevelSelectors(i);
+        }
 
-            document.querySelectorAll('.target-level-select').forEach(select => {
-                select.addEventListener('change', function() {
-                    const charId = this.id.split('-')[2];
-                    updateStatusText(charId);
-                });
+        document.getElementById('calculate-all').addEventListener('click', calculateTotal);
+
+        // 绑定当前等级变化事件
+        document.querySelectorAll('.current-level-select').forEach(select => {
+            select.addEventListener('change', function() {
+                const charId = this.id.split('-')[2];
+                updateTargetLevelOptions(charId); // 重构：不展示不可选option
+                updateStatusText(charId);
             });
         });
 
-        // 初始化等级选择器
-        function initLevelSelectors(charId) {
-            const currentSelect = document.getElementById(`current-level-${charId}`);
-            const targetSelect = document.getElementById(`target-level-${charId}`);
-            
-            // 清空现有选项
-            currentSelect.innerHTML = '';
-            targetSelect.innerHTML = '';
-            
-            // 添加空选项
-            const emptyOption = document.createElement('option');
-            emptyOption.value = '';
-            emptyOption.textContent = '请选择';
-            currentSelect.appendChild(emptyOption.cloneNode(true));
-            targetSelect.appendChild(emptyOption);
-            
-            // 添加等级选项
-            for (let level = 1; level <= 50; level++) {
-                const option = document.createElement('option');
-                option.value = level;
-                option.textContent = `${level}-${levelNameMap[level]}`;
-                currentSelect.appendChild(option.cloneNode(true));
-                targetSelect.appendChild(option);
-            }
-            
-            // 初始状态
-            currentSelect.value = '';
-            targetSelect.value = '';
+        document.querySelectorAll('.target-level-select').forEach(select => {
+            select.addEventListener('change', function() {
+                const charId = this.id.split('-')[2];
+                updateStatusText(charId);
+            });
+        });
+    });
+
+    // 初始化等级选择器
+    function initLevelSelectors(charId) {
+        const currentSelect = document.getElementById(`current-level-${charId}`);
+        const targetSelect = document.getElementById(`target-level-${charId}`);
+
+        // 清空现有选项
+        currentSelect.innerHTML = '';
+        targetSelect.innerHTML = '';
+
+        // 添加空选项
+        const emptyOption = document.createElement('option');
+        emptyOption.value = '';
+        emptyOption.textContent = '请选择';
+        currentSelect.appendChild(emptyOption.cloneNode(true));
+        targetSelect.appendChild(emptyOption);
+
+        // 添加等级选项
+        for (let level = 1; level <= 50; level++) {
+            const option = document.createElement('option');
+            option.value = level;
+            option.textContent = `${level}-${levelNameMap[level]}`;
+            currentSelect.appendChild(option.cloneNode(true));
+            targetSelect.appendChild(option);
+        }
+
+        // 初始状态
+        currentSelect.value = '';
+        targetSelect.value = '';
+        targetSelect.disabled = true;
+        updateStatusText(charId);
+    }
+
+    // 重构：目标等级仅展示可选选项（不可选的直接不渲染，而非隐藏）
+    function updateTargetLevelOptions(charId) {
+        const currentSelect = document.getElementById(`current-level-${charId}`);
+        const targetSelect = document.getElementById(`target-level-${charId}`);
+        const currentLevel = parseInt(currentSelect.value);
+
+        // 无当前等级：禁用并重置目标选择器
+        if (!currentLevel) {
             targetSelect.disabled = true;
-            updateStatusText(charId);
-        }
-
-        // 重构：目标等级仅展示可选选项（不可选的直接不渲染，而非隐藏）
-        function updateTargetLevelOptions(charId) {
-            const currentSelect = document.getElementById(`current-level-${charId}`);
-            const targetSelect = document.getElementById(`target-level-${charId}`);
-            const currentLevel = parseInt(currentSelect.value);
-            
-            // 无当前等级：禁用并重置目标选择器
-            if (!currentLevel) {
-                targetSelect.disabled = true;
-                targetSelect.innerHTML = '';
-                const emptyOption = document.createElement('option');
-                emptyOption.value = '';
-                emptyOption.textContent = '请选择';
-                targetSelect.appendChild(emptyOption);
-                targetSelect.value = '';
-                return;
-            }
-            
-            // 有当前等级：重新生成仅包含可选选项的目标列表（≥当前等级）
-            targetSelect.disabled = false;
-            targetSelect.innerHTML = ''; // 清空所有旧选项
-            
-            // 第一步：添加空选项
+            targetSelect.innerHTML = '';
             const emptyOption = document.createElement('option');
             emptyOption.value = '';
             emptyOption.textContent = '请选择';
             targetSelect.appendChild(emptyOption);
-            
-            // 第二步：仅添加 ≥ 当前等级的选项（不可选的直接不生成，彻底不展示）
-            for (let level = currentLevel; level <= 50; level++) {
-                const option = document.createElement('option');
-                option.value = level;
-                option.textContent = `${level}-${levelNameMap[level]}`;
-                targetSelect.appendChild(option);
-            }
-            
-            // 默认选中当前等级（提升用户体验）
-            targetSelect.value = currentLevel;
+            targetSelect.value = '';
+            return;
         }
 
-        // 更新状态文本
-        function updateStatusText(charId) {
-            const statusText = document.getElementById(`status-text-${charId}`);
-            const currentSelect = document.getElementById(`current-level-${charId}`);
-            const targetSelect = document.getElementById(`target-level-${charId}`);
-            const currentLevel = parseInt(currentSelect.value);
-            const targetLevel = parseInt(targetSelect.value);
-            const statusDot = document.getElementById(`char-status-${charId}`).querySelector('.status-dot');
-            
-            if (!currentLevel) {
-                statusText.textContent = "请先选择当前等级";
-                statusDot.style.backgroundColor = "var(--warning-color)";
-            } else {
-                statusText.textContent = `${levelNameMap[currentLevel]} → ${levelNameMap[targetLevel]}`;
-                statusDot.style.backgroundColor = "var(--secondary-color)";
-            }
+        // 有当前等级：重新生成仅包含可选选项的目标列表（≥当前等级）
+        targetSelect.disabled = false;
+        targetSelect.innerHTML = ''; // 清空所有旧选项
+
+        // 第一步：添加空选项
+        const emptyOption = document.createElement('option');
+        emptyOption.value = '';
+        emptyOption.textContent = '请选择';
+        targetSelect.appendChild(emptyOption);
+
+        // 第二步：仅添加 ≥ 当前等级的选项（不可选的直接不生成，彻底不展示）
+        for (let level = currentLevel; level <= 50; level++) {
+            const option = document.createElement('option');
+            option.value = level;
+            option.textContent = `${level}-${levelNameMap[level]}`;
+            targetSelect.appendChild(option);
         }
 
-        // 计算总需求
-        function calculateTotal() {
-            // 读取全局材料拥有量
-            const ownedZitan = parseInt(document.getElementById('global-owned-zitan').value) || 0;
-            const ownedJingjin = parseInt(document.getElementById('global-owned-jingjin').value) || 0;
-            const ownedQingjin = parseInt(document.getElementById('global-owned-qingjin').value) || 0;
-            
-            // 读取礼包配置
-            const zitanPerPackage = parseInt(document.getElementById('zitan-package').value) || 12;
-            const zitanPrice = parseInt(document.getElementById('zitan-pkg-price').value) || 11;
-            const jingjinPerPackage = parseInt(document.getElementById('jingjin-package').value) || 1;
-            const jingjinPrice = parseInt(document.getElementById('jingjin-pkg-price').value) || 18;
-            const qingjinPerPackage = parseInt(document.getElementById('qingjin-package').value) || 1;
-            const qingjinPrice = parseInt(document.getElementById('qingjin-pkg-price').value) || 55;
-            
-            // 读取活动币
-            const totalCoin = parseInt(document.getElementById('total-activity-coin').value) || 0;
+        // 默认选中当前等级（提升用户体验）
+        targetSelect.value = currentLevel;
+    }
 
-            // 计算所有神兵的总材料需求
-            let totalZitanNeed = 0, totalJingjinNeed = 0, totalQingjinNeed = 0;
-            let charDetails = [];
+    // 更新状态文本
+    function updateStatusText(charId) {
+        const statusText = document.getElementById(`status-text-${charId}`);
+        const currentSelect = document.getElementById(`current-level-${charId}`);
+        const targetSelect = document.getElementById(`target-level-${charId}`);
+        const currentLevel = parseInt(currentSelect.value);
+        const targetLevel = parseInt(targetSelect.value);
+        const statusDot = document.getElementById(`char-status-${charId}`).querySelector('.status-dot');
 
-            for (let charId = 1; charId <= 6; charId++) {
-                const currentLevel = parseInt(document.getElementById(`current-level-${charId}`).value);
-                const targetLevel = parseInt(document.getElementById(`target-level-${charId}`).value);
-                
-                // 跳过未选择等级的角色
-                if (!currentLevel || !targetLevel || currentLevel >= targetLevel) continue;
+        if (!currentLevel) {
+            statusText.textContent = "请先选择当前等级";
+            statusDot.style.backgroundColor = "var(--warning-color)";
+        } else {
+            statusText.textContent = `${levelNameMap[currentLevel]} → ${levelNameMap[targetLevel]}`;
+            statusDot.style.backgroundColor = "var(--secondary-color)";
+        }
+    }
 
-                // 计算单个角色的材料需求
-                let charZitan = 0, charJingjin = 0, charQingjin = 0;
-                for (let level = currentLevel + 1; level <= targetLevel; level++) {
-                    const [zitan, jingjin, qingjin] = levelMaterialData[level] || [0, 0, 0];
-                    charZitan += zitan;
-                    charJingjin += jingjin;
-                    charQingjin += qingjin;
-                }
+    // 计算总需求
+    function calculateTotal() {
+        // 读取全局材料拥有量
+        const ownedZitan = parseInt(document.getElementById('global-owned-zitan').value) || 0;
+        const ownedJingjin = parseInt(document.getElementById('global-owned-jingjin').value) || 0;
+        const ownedQingjin = parseInt(document.getElementById('global-owned-qingjin').value) || 0;
 
-                // 累加总需求
-                totalZitanNeed += charZitan;
-                totalJingjinNeed += charJingjin;
-                totalQingjinNeed += charQingjin;
+        // 读取礼包配置
+        const zitanPerPackage = parseInt(document.getElementById('zitan-package').value) || 12;
+        const zitanPrice = parseInt(document.getElementById('zitan-pkg-price').value) || 11;
+        const jingjinPerPackage = parseInt(document.getElementById('jingjin-package').value) || 1;
+        const jingjinPrice = parseInt(document.getElementById('jingjin-pkg-price').value) || 18;
+        const qingjinPerPackage = parseInt(document.getElementById('qingjin-package').value) || 1;
+        const qingjinPrice = parseInt(document.getElementById('qingjin-pkg-price').value) || 55;
 
-                // 记录单个角色详情
-                charDetails.push({
-                    id: charId,
-                    name: getCharName(charId),
-                    currentLevel: currentLevel,
-                    targetLevel: targetLevel,
-                    zitan: charZitan,
-                    jingjin: charJingjin,
-                    qingjin: charQingjin
-                });
+        // 读取活动币
+        const totalCoin = parseInt(document.getElementById('total-activity-coin').value) || 0;
+
+        // 计算所有神兵的总材料需求
+        let totalZitanNeed = 0, totalJingjinNeed = 0, totalQingjinNeed = 0;
+        let charDetails = [];
+
+        for (let charId = 1; charId <= 6; charId++) {
+            const currentLevel = parseInt(document.getElementById(`current-level-${charId}`).value);
+            const targetLevel = parseInt(document.getElementById(`target-level-${charId}`).value);
+
+            // 跳过未选择等级的角色
+            if (!currentLevel || !targetLevel || currentLevel >= targetLevel) continue;
+
+            // 计算单个角色的材料需求
+            let charZitan = 0, charJingjin = 0, charQingjin = 0;
+            for (let level = currentLevel + 1; level <= targetLevel; level++) {
+                const [zitan, jingjin, qingjin] = levelMaterialData[level] || [0, 0, 0];
+                charZitan += zitan;
+                charJingjin += jingjin;
+                charQingjin += qingjin;
             }
 
-            // 计算缺口
-            const zitanShortage = Math.max(0, totalZitanNeed - ownedZitan);
-            const jingjinShortage = Math.max(0, totalJingjinNeed - ownedJingjin);
-            const qingjinShortage = Math.max(0, totalQingjinNeed - ownedQingjin);
+            // 累加总需求
+            totalZitanNeed += charZitan;
+            totalJingjinNeed += charJingjin;
+            totalQingjinNeed += charQingjin;
 
-            // 计算需要购买的礼包数和花费
-            const zitanPackages = Math.ceil(zitanShortage / zitanPerPackage);
-            const zitanCost = zitanPackages * zitanPrice;
-            const jingjinPackages = Math.ceil(jingjinShortage / jingjinPerPackage);
-            const jingjinCost = jingjinPackages * jingjinPrice;
-            const qingjinPackages = Math.ceil(qingjinShortage / qingjinPerPackage);
-            const qingjinCost = qingjinPackages * qingjinPrice;
+            // 记录单个角色详情
+            charDetails.push({
+                id: charId,
+                name: getCharName(charId),
+                currentLevel: currentLevel,
+                targetLevel: targetLevel,
+                zitan: charZitan,
+                jingjin: charJingjin,
+                qingjin: charQingjin
+            });
+        }
 
-            const totalCost = zitanCost + jingjinCost + qingjinCost;
-            const coinSurplus = totalCoin - totalCost;
+        // 计算缺口
+        const zitanShortage = Math.max(0, totalZitanNeed - ownedZitan);
+        const jingjinShortage = Math.max(0, totalJingjinNeed - ownedJingjin);
+        const qingjinShortage = Math.max(0, totalQingjinNeed - ownedQingjin);
 
-            // 生成结果HTML
-            let resultHTML = `
+        // 计算需要购买的礼包数和花费
+        const zitanPackages = Math.ceil(zitanShortage / zitanPerPackage);
+        const zitanCost = zitanPackages * zitanPrice;
+        const jingjinPackages = Math.ceil(jingjinShortage / jingjinPerPackage);
+        const jingjinCost = jingjinPackages * jingjinPrice;
+        const qingjinPackages = Math.ceil(qingjinShortage / qingjinPerPackage);
+        const qingjinCost = qingjinPackages * qingjinPrice;
+
+        const totalCost = zitanCost + jingjinCost + qingjinCost;
+        const coinSurplus = totalCoin - totalCost;
+
+        // 生成结果HTML
+        let resultHTML = `
                 <div class="result-item">
                     <h4>总材料需求</h4>
                     <div class="result-content">
@@ -950,48 +990,48 @@
                 </div>
             `;
 
-            // 添加单个角色详情
-            if (charDetails.length > 0) {
-                resultHTML += `
+        // 添加单个角色详情
+        if (charDetails.length > 0) {
+            resultHTML += `
                     <div class="result-item">
                         <h4>各角色材料需求</h4>
                         <div class="result-content">
                 `;
-                charDetails.forEach(char => {
-                    resultHTML += `
+            charDetails.forEach(char => {
+                resultHTML += `
                         <p><strong>${char.name}</strong>（${levelNameMap[char.currentLevel]} → ${levelNameMap[char.targetLevel]}）：
                         紫檀木${formatNumber(char.zitan)}、精金${formatNumber(char.jingjin)}、青金石${formatNumber(char.qingjin)}</p>
                     `;
-                });
-                resultHTML += `
+            });
+            resultHTML += `
                         </div>
                     </div>
                 `;
-            }
-
-            // 显示结果
-            document.getElementById('total-result').innerHTML = resultHTML;
-
-            // 【新增核心代码：滚动到页面最底部】
-			window.scrollTo({
-				top: document.body.scrollHeight,
-				left: 0,
-				behavior: 'auto' // 无平滑动画，符合减少额外动画的需求
-			});
         }
 
-        // 辅助函数：获取角色名称
-        function getCharName(charId) {
-            const nameMap = {
-                1: '步1', 2: '步2', 3: '骑1', 4: '骑2', 5: '弓1', 6: '弓2'
-            };
-            return nameMap[charId] || `角色${charId}`;
-        }
+        // 显示结果
+        document.getElementById('total-result').innerHTML = resultHTML;
 
-        // 辅助函数：格式化数字（千分位）
-        function formatNumber(num) {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-    </script>
+        // 【新增核心代码：滚动到页面最底部】
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            left: 0,
+            behavior: 'auto' // 无平滑动画，符合减少额外动画的需求
+        });
+    }
+
+    // 辅助函数：获取角色名称
+    function getCharName(charId) {
+        const nameMap = {
+            1: '步1', 2: '步2', 3: '骑1', 4: '骑2', 5: '弓1', 6: '弓2'
+        };
+        return nameMap[charId] || `角色${charId}`;
+    }
+
+    // 辅助函数：格式化数字（千分位）
+    function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+</script>
 </body>
 </html>
