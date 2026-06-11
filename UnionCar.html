@@ -16,7 +16,7 @@
             background-color: #f5f7fa;
             color: #333;
             line-height: 1.6;
-            padding: 20px;
+            padding: 20px 20px 76px 20px; /* 底部56px导航 + 20px原有 */
             min-height: 100vh;
         }
         
@@ -220,6 +220,9 @@
             font-weight: 700;
             color: #4a6fa5;
             margin-bottom: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         
         .stat-label {
@@ -375,6 +378,32 @@
         }
         
         @media (max-width: 768px) {
+            body {
+                padding: 10px 10px 76px 10px;
+            }
+            header {
+                margin-bottom: 16px;
+                padding-bottom: 12px;
+            }
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 4px;
+            }
+            .description {
+                font-size: 0.85rem;
+            }
+            .app-container {
+                gap: 16px;
+            }
+            .input-section, .result-section {
+                padding: 16px;
+            }
+            .section-title {
+                font-size: 1.2rem;
+                margin-bottom: 12px;
+                padding-bottom: 8px;
+            }
+            
             .controls {
                 flex-direction: column;
             }
@@ -385,10 +414,49 @@
             
             .selected-players {
                 grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .player-card {
+                padding: 14px;
+            }
+            .player-name {
+                font-size: 1.1rem;
+            }
+            .player-rank {
+                font-size: 0.75rem;
+                padding: 3px 8px;
+            }
+            .player-details {
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+            }
+            .detail-item {
+                margin-bottom: 4px;
+            }
+            .detail-label {
+                font-size: 0.75rem;
+            }
+            .detail-value {
+                font-size: 0.9rem;
+            }
+            .player-header {
+                margin-bottom: 10px;
+                padding-bottom: 8px;
             }
             
-            h1 {
-                font-size: 2rem;
+            .stats {
+                gap: 10px;
+                padding: 12px;
+            }
+            .stat-item {
+                min-width: 70px;
+                padding: 10px 6px;
+            }
+            .stat-value {
+                font-size: 1.05rem;
+            }
+            .stat-label {
+                font-size: 0.75rem;
             }
             
             .button-group {
@@ -398,8 +466,8 @@
             
             .btn {
                 width: 100%;
-                padding: 16px 20px;
-                font-size: 17px;
+                padding: 14px 16px;
+                font-size: 16px;
             }
             
             .input-actions {
@@ -430,16 +498,41 @@
             }
             
             .data-input {
-                font-size: 16px; /* 增大移动端字体大小 */
-                height: 40vh; /* 调整移动端高度 */
+                font-size: 16px;
+                height: 35vh;
+                padding: 12px;
+            }
+            
+            /* 表格移动端横向滚动 */
+            .preview-table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .preview-table {
+                font-size: 0.75rem;
+                min-width: 600px;
+            }
+            .preview-table th, .preview-table td {
+                padding: 6px 8px;
+            }
+            
+            .tab-button {
+                padding: 8px 14px;
+                font-size: 0.85rem;
+            }
+            
+            .filter-checkbox label {
+                font-size: 0.85rem;
+            }
+            .empty-state {
+                padding: 20px 10px;
+            }
+            .empty-state i {
+                font-size: 2rem;
             }
         }
         
-        .sample-data {
-            margin-top: 15px;
-            font-size: 0.9rem;
-            color: #7f8c8d;
-        }
+
         
         .loading {
             display: none;
@@ -471,6 +564,8 @@
             top: 10px;
             right: 10px;
             z-index: 10;
+            display: flex;
+            gap: 8px;
         }
         
         .clear-input-btn {
@@ -482,6 +577,13 @@
             font-size: 14px;
             cursor: pointer;
             transition: background-color 0.3s;
+            white-space: nowrap;
+        }
+        .clear-input-btn.btn-paste {
+            background-color: rgba(74, 111, 165, 0.9);
+        }
+        .clear-input-btn.btn-paste:hover {
+            background-color: rgba(58, 90, 128, 0.9);
         }
         
         .clear-input-btn:hover {
@@ -565,7 +667,45 @@
             background-color: #f8f9fa;
             border-radius: 5px;
         }
+        /* ========== 底部导航栏 ========== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: #fff;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            z-index: 1000;
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+        }
+        .bottom-nav .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 12px;
+            font-weight: 500;
+            gap: 3px;
+            transition: color 0.2s;
+        }
+        .bottom-nav .nav-item .nav-icon {
+            font-size: 22px;
+            line-height: 1;
+        }
+        .bottom-nav .nav-item.active {
+            color: #4a6fa5;
+        }
+        .bottom-nav .nav-item.active .nav-icon {
+            color: #4a6fa5;
+        }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
+    </script>
 </head>
 <body>
     <div class="container">
@@ -583,30 +723,25 @@
                 <div class="data-input-container">
                     <textarea id="dataInput" class="data-input" placeholder="请粘贴成员数据到这里（格式参考下方示例）..."></textarea>
                     <div class="clear-btn-container">
+                        <button id="pasteBtn" class="clear-input-btn btn-paste">📋 粘贴</button>
                         <button id="clearInputBtn" class="clear-input-btn">清空</button>
                     </div>
                 </div>
                 
                 <div class="input-actions">
                     <div class="desktop-actions">
-                        <button id="loadSampleData" class="btn btn-sample">
-                            <i>📋</i> 加载示例数据
-                        </button>
+                        <span style="color:#7f8c8d;font-size:0.9rem;">数据格式：序号 成员名称 阶级 火炉等级 战力 周功勋 总功勋 周捐献</span>
                     </div>
                     
                     <div class="mobile-actions">
                         <div class="mobile-btn-group">
-                            <button id="loadSampleDataMobile" class="btn btn-sample">
-                                <i>📋</i> 示例数据
+                            <button id="pasteBtnMobile" class="btn" style="background-color:#4a6fa5;">
+                                <i>📋</i> 粘贴
                             </button>
                             <button id="clearInputBtnMobile" class="btn btn-clear">
                                 <i>🗑️</i> 清空
                             </button>
                         </div>
-                    </div>
-                    
-                    <div class="sample-data">
-                        <p>数据格式：序号 成员名称 阶级 火炉等级 战力 周功勋 总功勋 周捐献</p>
                     </div>
                 </div>
                 
@@ -671,7 +806,11 @@
                         </div>
                     </div>
                     
-                    <h3>抽取结果</h3>
+                    <h3>抽取结果
+                        <button id="saveImageBtn" class="btn" style="padding:6px 14px;font-size:13px;min-width:auto;margin-left:12px;vertical-align:middle;display:none;">
+                            <i>📷</i> 保存为图片
+                        </button>
+                    </h3>
                     <div class="selected-players" id="selectedPlayers">
                         <!-- 这里将通过JavaScript动态填充 -->
                     </div>
@@ -745,32 +884,6 @@
     </div>
 
     <script>
-        // 示例数据（包含周功勋为0的测试数据）
-        const sampleData = `        成员名称                 阶级      火炉等级    战力           周功勋         总功勋         周捐献         
-1       万里独行                 3         宫阙1级     113962916      1090764728     3880879336     141600         
-2       阿音丶                   5         宫阙2级     109487353      919738654      3314841732     156960         
-3       夕燃尽下                 4         宫阙1级     120553613      682682040      3094035750     156960         
-4       周游三国                 3         宫阙2级     154433569      936854672      3039481848     178320         
-5       凌云壮志                 4         宫阙1级     107794719      741915462      2931168978     127920         
-6       凑热闹                   4         宫阙1级     106071359      888585172      2917400646     187440         
-7       奉天初六                 3         宫阙1级     119081664      807863182      2869814768     127680         
-8       萤火微光                 3         宫阙1级     135160479      672025500      2815819290     155280         
-9       不归路                   1         宫阙1级     106718456      1348836688     2713112302     132240         
-10      啾湫啾                   3         宫阙1级     116121000      750497630      2656929774     149040         
-11      忘记曾经                 3         宫阙2级     119461891      550688526      2459365438     98160          
-12      嗷嗷嗷嗷                 3         宫阙2级     89632609       1087764848     2442699264     143040         
-13      雨季1234                 3         宫阙1级     127551805      909816212      2344323346     155520         
-14      诸葛亮瞎眼               3         宫阙1级     122758683      461019820      1966323080     142800         
-15      就是一个随性             3         宫阙1级     104821798      876264026      1950221974     38400          
-16      向阳天                   3         宫阙1级     112610847      513359106      1852361896     128640         
-17      菜又爱玩                 3         宫阙1级     104772473      637412508      1778469124     116640         
-18      狄大人                   3         宫阙1级     112061363      525834368      1776613464     151200         
-19      苟老板爱啃骨头           3         宫阙1级     106799736      352832208      1725559886     116880         
-20      豫语鱼雨                 3         宫阙1级     117901597      307358298      1628223182     33120          
-21      征霸天下                 3         宫阙1级     134423542      500105142      1590648144     166080         
-22      测试成员1                3         宫阙1级     100000000      0              1000000000     0              
-23      测试成员2                2         宫阙1级     95000000       0              950000000      12000          
-24      测试成员3                4         宫阙2级     110000000      1200000        2000000000     24000          `;
 
         // DOM元素
         const dataInput = document.getElementById('dataInput');
@@ -778,8 +891,8 @@
         const extractBtn = document.getElementById('extractBtn');
         const clearInputBtn = document.getElementById('clearInputBtn');
         const clearInputBtnMobile = document.getElementById('clearInputBtnMobile');
-        const loadSampleDataBtn = document.getElementById('loadSampleData');
-        const loadSampleDataBtnMobile = document.getElementById('loadSampleDataMobile');
+        const pasteBtn = document.getElementById('pasteBtn');
+        const pasteBtnMobile = document.getElementById('pasteBtnMobile');
         const filterZeroMeritCheckbox = document.getElementById('filterZeroMerit');
         const errorMessage = document.getElementById('errorMessage');
         const successMessage = document.getElementById('successMessage');
@@ -796,6 +909,8 @@
         const loadingIndicator = document.getElementById('loadingIndicator');
         const totalPlayersNote = document.getElementById('totalPlayersNote');
         const qualifiedPlayersNote = document.getElementById('qualifiedPlayersNote');
+        const saveImageBtn = document.getElementById('saveImageBtn');
+        const resultSection = document.querySelector('.result-section');
         
         // 标签切换功能
         const tabButtons = document.querySelectorAll('.tab-button');
@@ -818,10 +933,26 @@
             });
         });
 
-        // 加载示例数据
-        function loadSampleData() {
-            dataInput.value = sampleData;
-            showSuccess('示例数据已加载（包含测试数据）');
+        // 从剪贴板粘贴
+        async function pasteFromClipboard() {
+            try {
+                const text = await navigator.clipboard.readText();
+                if (text.trim()) {
+                    dataInput.value = text;
+                    showSuccess('已粘贴剪贴板内容');
+                } else {
+                    showError('剪贴板为空');
+                }
+            } catch (err) {
+                // 降级方案：尝试读取剪贴板
+                try {
+                    const text = await navigator.clipboard.readText();
+                    dataInput.value = text;
+                    showSuccess('已粘贴剪贴板内容');
+                } catch (e) {
+                    showError('无法读取剪贴板，请手动 Ctrl+V 粘贴');
+                }
+            }
         }
 
         // 清空输入框
@@ -933,12 +1064,23 @@
             return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         }
 
+        // 压缩大数显示（万/亿）
+        function formatCompact(num) {
+            if (num >= 100000000) {
+                return (num / 100000000).toFixed(2).replace(/\.?0+$/, '') + '亿';
+            }
+            if (num >= 10000) {
+                return (num / 10000).toFixed(1).replace(/\.0$/, '') + '万';
+            }
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
         // 显示抽取结果
         function displayResults(players, qualifiedPlayers, extractedPlayers, averageWeeklyMerit, filteredCount) {
             // 更新统计数据
             totalPlayersEl.textContent = players.length;
             filteredPlayersEl.textContent = filteredCount;
-            avgWeeklyMeritEl.textContent = formatNumber(averageWeeklyMerit);
+            avgWeeklyMeritEl.textContent = formatCompact(averageWeeklyMerit);
             qualifiedPlayersEl.textContent = qualifiedPlayers.length;
             extractedCountEl.textContent = extractedPlayers.length;
             
@@ -980,15 +1122,15 @@
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">战力</div>
-                                <div class="detail-value">${formatNumber(player.combatPower)}</div>
+                                <div class="detail-value">${formatCompact(player.combatPower)}</div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">周功勋</div>
-                                <div class="detail-value highlight">${formatNumber(player.weeklyMerit)}</div>
+                                <div class="detail-value highlight">${formatCompact(player.weeklyMerit)}</div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">总功勋</div>
-                                <div class="detail-value">${formatNumber(player.totalMerit)}</div>
+                                <div class="detail-value">${formatCompact(player.totalMerit)}</div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">周捐献</div>
@@ -1020,17 +1162,17 @@
                 }
                 
                 const weeklyMeritDisplay = hasZeroMerit 
-                    ? `<span class="zero-merit">${formatNumber(player.weeklyMerit)}</span>` 
-                    : `<span class="${isQualified ? 'highlight' : ''}">${formatNumber(player.weeklyMerit)}</span>`;
+                    ? `<span class="zero-merit">${formatCompact(player.weeklyMerit)}</span>` 
+                    : `<span class="${isQualified ? 'highlight' : ''}">${formatCompact(player.weeklyMerit)}</span>`;
                 
                 row.innerHTML = `
                     <td>${player.id}</td>
                     <td>${player.name}</td>
                     <td>${player.rank}</td>
                     <td>${player.stoveLevel}</td>
-                    <td>${formatNumber(player.combatPower)}</td>
+                    <td>${formatCompact(player.combatPower)}</td>
                     <td>${weeklyMeritDisplay}</td>
-                    <td>${formatNumber(player.totalMerit)}</td>
+                    <td>${formatCompact(player.totalMerit)}</td>
                     <td>${formatNumber(player.weeklyDonation)}</td>
                 `;
                 
@@ -1056,9 +1198,9 @@
                     <td>${player.name}</td>
                     <td>${player.rank}</td>
                     <td>${player.stoveLevel}</td>
-                    <td>${formatNumber(player.combatPower)}</td>
-                    <td class="highlight">${formatNumber(player.weeklyMerit)}</td>
-                    <td>${formatNumber(player.totalMerit)}</td>
+                    <td>${formatCompact(player.combatPower)}</td>
+                    <td class="highlight">${formatCompact(player.weeklyMerit)}</td>
+                    <td>${formatCompact(player.totalMerit)}</td>
                     <td>${formatNumber(player.weeklyDonation)}</td>
                 `;
                 
@@ -1068,6 +1210,7 @@
             // 显示结果区域
             emptyState.style.display = 'none';
             resultContainer.classList.add('show');
+            saveImageBtn.style.display = 'inline-block';
             
             // 滚动到结果区域
             setTimeout(() => {
@@ -1145,17 +1288,73 @@
             }, 800);
         }
 
+        // 保存结果为图片
+        async function saveAsImage() {
+            if (!resultContainer.classList.contains('show')) {
+                showError('请先抽取队长后再保存图片');
+                return;
+            }
+            try {
+                const cloneContainer = resultContainer.cloneNode(true);
+                const wrapper = document.createElement('div');
+                wrapper.style.position = 'fixed';
+                wrapper.style.left = '-9999px';
+                wrapper.style.top = '0';
+                wrapper.style.width = resultContainer.offsetWidth + 'px';
+                wrapper.style.background = '#ffffff';
+                wrapper.style.padding = '20px';
+                wrapper.style.zIndex = '-1';
+                wrapper.style.fontFamily = "'Microsoft YaHei', Arial, sans-serif";
+                wrapper.appendChild(cloneContainer);
+
+                // 移除全部成员数据 Tab，只保留符合条件成员
+                const tabAll = wrapper.querySelector('#tab-all');
+                if (tabAll) tabAll.remove();
+                // 移除 tab 切换按钮行
+                const tabBtns = wrapper.querySelector('.tab-buttons');
+                if (tabBtns) tabBtns.remove();
+                // 确保符合条件成员 tab 可见
+                const tabQualified = wrapper.querySelector('#tab-qualified');
+                if (tabQualified) tabQualified.classList.add('active');
+
+                // 修复克隆体样式
+                const tables = wrapper.querySelectorAll('.preview-table');
+                tables.forEach(t => { t.style.fontSize = '0.85rem'; });
+                const cards = wrapper.querySelectorAll('.player-card');
+                cards.forEach(c => { c.style.padding = '14px'; c.style.marginBottom = '8px'; });
+
+                document.body.appendChild(wrapper);
+
+                const canvas = await html2canvas(wrapper, {
+                    backgroundColor: '#ffffff',
+                    scale: 2,
+                    useCORS: true,
+                    logging: false
+                });
+
+                document.body.removeChild(wrapper);
+
+                // 触发下载
+                const link = document.createElement('a');
+                const now = new Date();
+                const timestamp = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}_${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
+                link.download = `盟车抽取结果_${timestamp}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+
+                showSuccess('图片已保存！');
+            } catch (error) {
+                showError('保存图片失败: ' + error.message);
+            }
+        }
+
         // 事件监听
         extractBtn.addEventListener('click', extractCaptains);
         clearInputBtn.addEventListener('click', clearInput);
         clearInputBtnMobile.addEventListener('click', clearInput);
-        loadSampleDataBtn.addEventListener('click', loadSampleData);
-        loadSampleDataBtnMobile.addEventListener('click', loadSampleData);
-        
-        // 初始加载示例数据
-        window.addEventListener('DOMContentLoaded', () => {
-            dataInput.value = sampleData;
-        });
+        pasteBtn.addEventListener('click', pasteFromClipboard);
+        pasteBtnMobile.addEventListener('click', pasteFromClipboard);
+        saveImageBtn.addEventListener('click', saveAsImage);
         
         // 按Enter键触发抽取
         playerCountInput.addEventListener('keypress', (e) => {
@@ -1172,5 +1371,16 @@
             }
         });
     </script>
+    <!-- 底部导航栏 -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <span class="nav-icon">🧮</span>
+            <span>计算器</span>
+        </a>
+        <a href="UnionCar.html" class="nav-item active">
+            <span class="nav-icon">🚗</span>
+            <span>盟车抽取</span>
+        </a>
+    </nav>
 </body>
 </html>

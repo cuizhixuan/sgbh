@@ -18,7 +18,7 @@
             --bg-secondary: #f2f2f7;
             --bg-tertiary: #e5e5ea;
             --border-color: #c7c7cc;
-            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --card-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
             --radius-sm: 8px;
             --radius-md: 12px;
             --radius-lg: 16px;
@@ -46,7 +46,7 @@
             background-color: var(--bg-secondary);
             color: var(--text-primary);
             line-height: 1.5;
-            padding-bottom: 80px;
+            padding-bottom: 136px; /* 80px原有 + 56px底部导航 */
             max-width: 100vw;
             overflow-x: hidden;
         }
@@ -67,29 +67,78 @@
             position: sticky;
             top: 0;
             z-index: 100;
-        }
-
-        .header h1 {
-            font-size: var(--font-size-xl);
-            font-weight: 600;
-            color: var(--text-primary);
             text-align: center;
-            margin-bottom: var(--spacing-sm);
+            border-bottom: 3px solid var(--primary-color);
         }
-
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
         .header .subtitle {
             font-size: var(--font-size-sm);
-            color: var(--text-secondary);
-            text-align: center;
+            color: #7f8c8d;
         }
+
+        /* ========== 兵种切换标签 ========== */
+        .class-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: var(--spacing-md);
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+        .class-tab {
+            flex: 1;
+            padding: 12px 8px;
+            border: none;
+            background: transparent;
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            white-space: nowrap;
+        }
+        .class-tab::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 16px;
+            right: 16px;
+            height: 3px;
+            border-radius: 3px 3px 0 0;
+            background: transparent;
+            transition: background 0.2s;
+        }
+        .class-tab.active {
+            color: var(--primary-color);
+        }
+        .class-tab.active::after {
+            background: var(--primary-color);
+        }
+        .class-tab.infantry.active { color: #2a8cff; }
+        .class-tab.infantry.active::after { background: #2a8cff; }
+        .class-tab.cavalry.active { color: #32d74b; }
+        .class-tab.cavalry.active::after { background: #32d74b; }
+        .class-tab.archer.active { color: #ff9f0a; }
+        .class-tab.archer.active::after { background: #ff9f0a; }
 
         /* 兵种分组容器（合并后的卡片） */
         .class-group-card {
+            display: none;
             background-color: var(--bg-primary);
             border-radius: var(--radius-md);
             padding: var(--spacing-md);
             box-shadow: var(--card-shadow);
             margin-bottom: var(--spacing-md);
+        }
+        .class-group-card.active {
+            display: block;
         }
 
         /* 兵种分组标题 */
@@ -101,27 +150,20 @@
             padding-bottom: var(--spacing-sm);
             border-bottom: 1px solid var(--border-color);
         }
-
         .class-group-header h2 {
-            font-size: var(--font-size-lg);
+            font-size: var(--font-size-md);
             font-weight: 600;
             flex: 1;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
         }
-
         .class-group-header.infantry h2 { color: #2a8cff; }
         .class-group-header.cavalry h2 { color: #32d74b; }
         .class-group-header.archer h2 { color: #ff9f0a; }
-
-        .class-group-header::before {
-            content: '';
-            display: inline-block;
-            width: 4px;
-            height: 16px;
-            border-radius: 2px;
+        .class-group-header .group-icon {
+            font-size: 20px;
         }
-        .class-group-header.infantry::before { background-color: #2a8cff; }
-        .class-group-header.cavalry::before { background-color: #32d74b; }
-        .class-group-header.archer::before { background-color: #ff9f0a; }
 
         /* 角色行（合并后每个兵种下的角色行） */
         .character-row {
@@ -275,12 +317,16 @@
             margin-bottom: var(--spacing-xl);
             box-shadow: var(--card-shadow);
         }
-
-        .materials-input h3 {
+        .materials-input .section-title {
             font-size: var(--font-size-lg);
             font-weight: 600;
             margin-bottom: var(--spacing-md);
-            color: var(--text-primary);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 1px solid var(--border-color);
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .materials-grid {
@@ -316,6 +362,33 @@
             border-color: var(--primary-color);
         }
 
+        /* 活动币输入框 */
+        .coin-input-row {
+            margin-top: 16px;
+        }
+        .coin-input-row label {
+            display: block;
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-xs);
+            font-weight: 500;
+        }
+        .coin-input-row input {
+            width: 100%;
+            padding: 12px;
+            font-size: var(--font-size-md);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: border-color 0.2s;
+        }
+        .coin-input-row input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(42, 140, 255, 0.1);
+        }
+
         /* 礼包设置 */
         .package-settings {
             background-color: var(--bg-secondary);
@@ -331,10 +404,10 @@
             color: var(--text-primary);
         }
 
-        /* 按钮组：移除缩放动画，简化交互 */
+        /* 按钮组 */
         .button-group {
             position: fixed;
-            bottom: 0;
+            bottom: 56px;
             left: 0;
             right: 0;
             background-color: var(--bg-primary);
@@ -342,9 +415,8 @@
             display: flex;
             gap: var(--spacing-md);
             box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
-            z-index: 1000;
+            z-index: 999;
         }
-
         .button-group button {
             flex: 1;
             padding: 14px;
@@ -353,81 +425,206 @@
             font-size: var(--font-size-md);
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s ease; /* 仅保留背景色过渡，移除缩放 */
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: var(--spacing-sm);
         }
-
         #calculate-all {
-            background-color: var(--secondary-color);
+            background-color: #4a6fa5;
             color: white;
         }
-
         #calculate-all:active {
-            background-color: #2cc142; /* 仅保留背景色变化，移除transform: scale */
+            background-color: #3a5a80;
+            transform: translateY(2px);
         }
-
-        /* 结果区域：移除淡入动画，简化样式 */
+        /* 结果区域 */
         .results-section {
             background-color: var(--bg-primary);
             border-radius: var(--radius-md);
             padding: var(--spacing-md);
             margin-top: var(--spacing-md);
+            margin-bottom: 110px;
             box-shadow: var(--card-shadow);
         }
-
-        .result-summary {
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .result-summary h3 {
+        .results-section .section-title {
             font-size: var(--font-size-lg);
             font-weight: 600;
             margin-bottom: var(--spacing-md);
-            color: var(--text-primary);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 1px solid var(--border-color);
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ========== 结果展示区 ========== */
+        .result-summary {
+            margin-bottom: var(--spacing-sm);
         }
 
         .result-item {
-            margin-bottom: var(--spacing-md);
-            padding-bottom: var(--spacing-md);
-            border-bottom: 1px solid var(--border-color);
+            margin-bottom: var(--spacing-lg);
         }
-
         .result-item:last-child {
-            border-bottom: none;
+            margin-bottom: 0;
         }
 
         .result-item h4 {
             font-size: var(--font-size-md);
             font-weight: 600;
-            margin-bottom: var(--spacing-sm);
-            color: var(--text-primary);
+            margin-bottom: var(--spacing-md);
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .result-content {
-            font-size: var(--font-size-sm);
-            color: var(--text-secondary);
+        /* 材料卡片行 */
+        .material-cards {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
         }
 
-        .result-badge {
-            display: inline-block;
-            padding: 4px 8px;
+        .material-result-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            border-left: 4px solid #ddd;
+        }
+        .material-result-card.shortage {
+            border-left-color: var(--danger-color);
+            background: #fff5f5;
+        }
+        .material-result-card.enough {
+            border-left-color: var(--secondary-color);
+            background: #f5fff7;
+        }
+
+        .material-result-card .mrc-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .material-result-card .mrc-icon {
+            font-size: 20px;
+        }
+        .material-result-card .mrc-name {
+            font-size: var(--font-size-md);
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .material-result-card .mrc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+        .mrc-stat {
+            text-align: center;
+            padding: 8px 4px;
+            background: white;
             border-radius: var(--radius-sm);
-            font-size: var(--font-size-xs);
-            font-weight: 600;
-            margin-left: var(--spacing-sm);
         }
-
-        .badge-enough {
-            background-color: rgba(50, 215, 75, 0.1);
+        .mrc-stat .mrc-val {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2c3e50;
+            line-height: 1.3;
+        }
+        .mrc-stat .mrc-val.highlight-red {
+            color: var(--danger-color);
+            font-size: 1.4rem;
+        }
+        .mrc-stat .mrc-val.highlight-green {
             color: var(--secondary-color);
         }
+        .mrc-stat .mrc-label {
+            font-size: var(--font-size-xs);
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
 
-        .badge-need {
-            background-color: rgba(255, 69, 58, 0.1);
-            color: var(--danger-color);
+        /* 缺口购买提示条 */
+        .mrc-action {
+            margin-top: 10px;
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .mrc-action.need-buy {
+            background: #fff0f0;
+            color: #c0392b;
+            border: 1px solid #f5c6cb;
+        }
+        .mrc-action.no-need {
+            background: #f0fff4;
+            color: #27ae60;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* 花销汇总卡片 */
+        .cost-summary-card {
+            background: linear-gradient(135deg, #4a6fa5, #3a5a80);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            color: white;
+        }
+        .cost-summary-card .cost-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            font-size: var(--font-size-sm);
+        }
+        .cost-summary-card .cost-row:last-child {
+            border-bottom: none;
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            margin-top: 4px;
+            padding-top: 12px;
+        }
+        .cost-summary-card .cost-amount {
+            font-weight: 700;
+        }
+
+        /* 角色明细小卡 */
+        .char-detail-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .char-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-sm);
+        }
+        .char-detail-item .cd-name {
+            font-weight: 700;
+            color: #2c3e50;
+            min-width: 36px;
+        }
+        .char-detail-item .cd-path {
+            color: var(--text-secondary);
+            flex: 1;
+        }
+        .char-detail-item .cd-mats {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: var(--font-size-xs);
         }
 
         /* 响应式调整：锁死宽度，无额外动画 */
@@ -445,6 +642,45 @@
                 width: calc(50% - var(--spacing-md)/2) !important;
             }
         }
+        /* ========== 底部导航栏 ========== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            z-index: 1000;
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .bottom-nav .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--text-tertiary);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            gap: 3px;
+            transition: color 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .bottom-nav .nav-item .nav-icon {
+            font-size: 22px;
+            line-height: 1;
+        }
+        .bottom-nav .nav-item.active {
+            color: var(--primary-color);
+        }
+        .bottom-nav .nav-item.active .nav-icon {
+            color: var(--primary-color);
+        }
     </style>
 </head>
 <body>
@@ -455,12 +691,19 @@
         <div class="subtitle">风采 · 神兵进阶规划</div>
     </div>
 
+    <!-- 兵种切换标签 -->
+    <div class="class-tabs">
+        <button class="class-tab infantry active" data-group="infantry">⚔️ 步兵</button>
+        <button class="class-tab cavalry" data-group="cavalry">🐴 骑兵</button>
+        <button class="class-tab archer" data-group="archer">🏹 弓兵</button>
+    </div>
+
     <!-- 神兵输入区域 -->
     <div class="characters-container">
         <!-- 步兵组 -->
-        <div class="class-group-card">
+        <div class="class-group-card active" data-group="infantry">
             <div class="class-group-header infantry">
-                <h2>步兵</h2>
+                <h2><span class="group-icon">⚔️</span>步兵</h2>
             </div>
 
             <!-- 步兵1 -->
@@ -515,9 +758,9 @@
         </div>
 
         <!-- 骑兵组 -->
-        <div class="class-group-card">
+        <div class="class-group-card" data-group="cavalry">
             <div class="class-group-header cavalry">
-                <h2>骑兵</h2>
+                <h2><span class="group-icon">🐴</span>骑兵</h2>
             </div>
 
             <!-- 骑兵1 -->
@@ -572,9 +815,9 @@
         </div>
 
         <!-- 弓兵组 -->
-        <div class="class-group-card">
+        <div class="class-group-card" data-group="archer">
             <div class="class-group-header archer">
-                <h2>弓兵</h2>
+                <h2><span class="group-icon">🏹</span>弓兵</h2>
             </div>
 
             <!-- 弓兵1 -->
@@ -631,7 +874,7 @@
 
     <!-- 材料输入区域 -->
     <div class="materials-input">
-        <h3>全局材料设置</h3>
+        <div class="section-title">📦 全局材料设置</div>
         <div class="materials-grid">
             <div class="material-item">
                 <label for="global-owned-zitan">已拥有紫檀木</label>
@@ -681,16 +924,16 @@
             </div>
         </div>
 
-        <div style="margin-top: 16px;">
-            <label for="total-activity-coin" style="display: block; font-weight: 600; margin-bottom: 8px;">可用活动币</label>
-            <input type="number" id="total-activity-coin" min="0" value="0" style="width: 100%; padding: 12px; font-size: 16px;">
+        <div class="coin-input-row">
+            <label for="total-activity-coin">💰 可用活动币</label>
+            <input type="number" id="total-activity-coin" min="0" value="0" placeholder="输入可用活动币数量">
         </div>
     </div>
 
     <!-- 结果区域：移除淡入动画类 -->
     <div class="results-section" id="results-section">
         <div class="result-summary">
-            <h3>计算结果</h3>
+            <div class="section-title">📊 计算结果</div>
             <div id="total-result">
                 <p style="color: var(--text-secondary); text-align: center;">请点击"汇总计算"查看结果</p>
             </div>
@@ -778,6 +1021,20 @@
 
     // 初始化页面
     document.addEventListener('DOMContentLoaded', () => {
+        // 兵种标签切换
+        document.querySelectorAll('.class-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const group = this.dataset.group;
+                // 更新标签激活状态
+                document.querySelectorAll('.class-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                // 切换兵种卡片显示
+                document.querySelectorAll('.class-group-card').forEach(card => {
+                    card.classList.toggle('active', card.dataset.group === group);
+                });
+            });
+        });
+
         for (let i = 1; i <= 6; i++) {
             initLevelSelectors(i);
         }
@@ -963,29 +1220,103 @@
         const coinSurplus = totalCoin - totalCost;
 
         // 生成结果HTML
+        // 收集升级目标摘要
+        const targets = charDetails.map(c => `<strong>${c.name}</strong> ${levelNameMap[c.currentLevel]}→${levelNameMap[c.targetLevel]}`).join('　');
+
         let resultHTML = `
                 <div class="result-item">
-                    <h4>总材料需求</h4>
-                    <div class="result-content">
-                        <p>紫檀木：${formatNumber(totalZitanNeed)}（已拥有：${formatNumber(ownedZitan)}，缺口：${formatNumber(zitanShortage)}）
-                            ${zitanShortage > 0 ? `<span class="result-badge badge-need">需购${zitanPackages}个礼包</span>` : `<span class="result-badge badge-enough">足够</span>`}
-                        </p>
-                        <p>精金：${formatNumber(totalJingjinNeed)}（已拥有：${formatNumber(ownedJingjin)}，缺口：${formatNumber(jingjinShortage)}）
-                            ${jingjinShortage > 0 ? `<span class="result-badge badge-need">需购${jingjinPackages}个礼包</span>` : `<span class="result-badge badge-enough">足够</span>`}
-                        </p>
-                        <p>青金石：${formatNumber(totalQingjinNeed)}（已拥有：${formatNumber(ownedQingjin)}，缺口：${formatNumber(qingjinShortage)}）
-                            ${qingjinShortage > 0 ? `<span class="result-badge badge-need">需购${qingjinPackages}个礼包</span>` : `<span class="result-badge badge-enough">足够</span>`}
-                        </p>
+                    <h4>🎯 升级目标</h4>
+                    <p style="font-size:14px;color:#555;line-height:1.8;">${targets || '无'}</p>
+                </div>
+
+                <div class="result-item">
+                    <h4>📦 材料需求明细</h4>
+                    <div class="material-cards">
+                        <!-- 紫檀木 -->
+                        <div class="material-result-card ${zitanShortage > 0 ? 'shortage' : 'enough'}">
+                            <div class="mrc-header">
+                                <span class="mrc-icon">🪵</span>
+                                <span class="mrc-name">紫檀木</span>
+                            </div>
+                            <div class="mrc-grid">
+                                <div class="mrc-stat">
+                                    <div class="mrc-val">${formatNumber(totalZitanNeed)}</div>
+                                    <div class="mrc-label">需要</div>
+                                </div>
+                                <div class="mrc-stat">
+                                    <div class="mrc-val">${formatNumber(ownedZitan)}</div>
+                                    <div class="mrc-label">拥有</div>
+                                </div>
+                                <div class="mrc-stat">
+                                    <div class="mrc-val ${zitanShortage > 0 ? 'highlight-red' : 'highlight-green'}">${zitanShortage > 0 ? formatNumber(zitanShortage) : '✓'}</div>
+                                    <div class="mrc-label">缺口</div>
+                                </div>
+                            </div>
+                            ${zitanShortage > 0 ? `<div class="mrc-action need-buy">⚠️ 需购买 <strong>${zitanPackages}</strong> 个礼包（${zitanPerPackage}个/包）</div>` : `<div class="mrc-action no-need">✅ 材料充足，无需购买</div>`}
+                        </div>
+
+                        <!-- 精金 -->
+                        <div class="material-result-card ${jingjinShortage > 0 ? 'shortage' : 'enough'}">
+                            <div class="mrc-header">
+                                <span class="mrc-icon">✨</span>
+                                <span class="mrc-name">精金</span>
+                            </div>
+                            <div class="mrc-grid">
+                                <div class="mrc-stat">
+                                    <div class="mrc-val">${formatNumber(totalJingjinNeed)}</div>
+                                    <div class="mrc-label">需要</div>
+                                </div>
+                                <div class="mrc-stat">
+                                    <div class="mrc-val">${formatNumber(ownedJingjin)}</div>
+                                    <div class="mrc-label">拥有</div>
+                                </div>
+                                <div class="mrc-stat">
+                                    <div class="mrc-val ${jingjinShortage > 0 ? 'highlight-red' : 'highlight-green'}">${jingjinShortage > 0 ? formatNumber(jingjinShortage) : '✓'}</div>
+                                    <div class="mrc-label">缺口</div>
+                                </div>
+                            </div>
+                            ${jingjinShortage > 0 ? `<div class="mrc-action need-buy">⚠️ 需购买 <strong>${jingjinPackages}</strong> 个礼包（${jingjinPerPackage}个/包）</div>` : `<div class="mrc-action no-need">✅ 材料充足，无需购买</div>`}
+                        </div>
+
+                        <!-- 青金石 -->
+                        <div class="material-result-card ${qingjinShortage > 0 ? 'shortage' : 'enough'}">
+                            <div class="mrc-header">
+                                <span class="mrc-icon">💎</span>
+                                <span class="mrc-name">青金石</span>
+                            </div>
+                            <div class="mrc-grid">
+                                <div class="mrc-stat">
+                                    <div class="mrc-val">${formatNumber(totalQingjinNeed)}</div>
+                                    <div class="mrc-label">需要</div>
+                                </div>
+                                <div class="mrc-stat">
+                                    <div class="mrc-val">${formatNumber(ownedQingjin)}</div>
+                                    <div class="mrc-label">拥有</div>
+                                </div>
+                                <div class="mrc-stat">
+                                    <div class="mrc-val ${qingjinShortage > 0 ? 'highlight-red' : 'highlight-green'}">${qingjinShortage > 0 ? formatNumber(qingjinShortage) : '✓'}</div>
+                                    <div class="mrc-label">缺口</div>
+                                </div>
+                            </div>
+                            ${qingjinShortage > 0 ? `<div class="mrc-action need-buy">⚠️ 需购买 <strong>${qingjinPackages}</strong> 个礼包（${qingjinPerPackage}个/包）</div>` : `<div class="mrc-action no-need">✅ 材料充足，无需购买</div>`}
+                        </div>
                     </div>
                 </div>
+
                 <div class="result-item">
-                    <h4>礼包花费</h4>
-                    <div class="result-content">
-                        <p>紫檀木礼包：${zitanPackages}个 × ${zitanPrice} = ${formatNumber(zitanCost)} 活动币</p>
-                        <p>精金礼包：${jingjinPackages}个 × ${jingjinPrice} = ${formatNumber(jingjinCost)} 活动币</p>
-                        <p>青金石礼包：${qingjinPackages}个 × ${qingjinPrice} = ${formatNumber(qingjinCost)} 活动币</p>
-                        <p><strong>总计：${formatNumber(totalCost)} 活动币</strong></p>
-                        <p>可用活动币：${formatNumber(totalCoin)} → 剩余：${formatNumber(coinSurplus)} ${coinSurplus < 0 ? '<span class="result-badge badge-need">不足</span>' : '<span class="result-badge badge-enough">足够</span>'}</p>
+                    <h4>💰 礼包花费</h4>
+                    <div class="cost-summary-card">
+                        ${zitanPackages > 0 ? `<div class="cost-row"><span>🪵 紫檀木礼包</span><span class="cost-amount">${zitanPackages}个 × ${zitanPrice}币 = ${formatNumber(zitanCost)} 活动币</span></div>` : ''}
+                        ${jingjinPackages > 0 ? `<div class="cost-row"><span>✨ 精金礼包</span><span class="cost-amount">${jingjinPackages}个 × ${jingjinPrice}币 = ${formatNumber(jingjinCost)} 活动币</span></div>` : ''}
+                        ${qingjinPackages > 0 ? `<div class="cost-row"><span>💎 青金石礼包</span><span class="cost-amount">${qingjinPackages}个 × ${qingjinPrice}币 = ${formatNumber(qingjinCost)} 活动币</span></div>` : ''}
+                        <div class="cost-row"><span>📊 合计花费</span><span class="cost-amount">${formatNumber(totalCost)} 活动币</span></div>
+                    </div>
+                    <div style="margin-top:12px;padding:12px;background:#f8f9fa;border-radius:8px;text-align:center;">
+                        <span style="font-size:14px;color:#555;">可用 <strong style="font-size:1.2rem;color:#2c3e50;">${formatNumber(totalCoin)}</strong> 活动币 →
+                        ${coinSurplus >= 0
+                            ? `<span style="color:#27ae60;font-weight:700;font-size:1.1rem;">剩余 ${formatNumber(coinSurplus)}</span> ✅`
+                            : `<span style="color:#e74c3c;font-weight:700;font-size:1.1rem;">不足 ${formatNumber(Math.abs(coinSurplus))}</span> ❌`}
+                        </span>
                     </div>
                 </div>
             `;
@@ -994,13 +1325,16 @@
         if (charDetails.length > 0) {
             resultHTML += `
                     <div class="result-item">
-                        <h4>各角色材料需求</h4>
-                        <div class="result-content">
+                        <h4>👤 各角色明细</h4>
+                        <div class="char-detail-list">
                 `;
             charDetails.forEach(char => {
                 resultHTML += `
-                        <p><strong>${char.name}</strong>（${levelNameMap[char.currentLevel]} → ${levelNameMap[char.targetLevel]}）：
-                        紫檀木${formatNumber(char.zitan)}、精金${formatNumber(char.jingjin)}、青金石${formatNumber(char.qingjin)}</p>
+                        <div class="char-detail-item">
+                            <span class="cd-name">${char.name}</span>
+                            <span class="cd-path">${levelNameMap[char.currentLevel]} → ${levelNameMap[char.targetLevel]}</span>
+                            <span class="cd-mats">🪵${formatNumber(char.zitan)} ✨${formatNumber(char.jingjin)} 💎${formatNumber(char.qingjin)}</span>
+                        </div>
                     `;
             });
             resultHTML += `
@@ -1033,5 +1367,16 @@
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 </script>
+    <!-- 底部导航栏 -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item active">
+            <span class="nav-icon">🧮</span>
+            <span>计算器</span>
+        </a>
+        <a href="UnionCar.html" class="nav-item">
+            <span class="nav-icon">🚗</span>
+            <span>盟车抽取</span>
+        </a>
+    </nav>
 </body>
 </html>
